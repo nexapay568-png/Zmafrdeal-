@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Zmafrdeal — Seller Portal</title>
+<link rel="icon" href="zmafrdeal.png" type="image/png"/>
+<link rel="apple-touch-icon" href="zmafrdeal.png"/>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#1a1a2e"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --primary:#c8a96e;--primary-dark:#a8894e;--bg:#0f0f1a;--surface:#1a1a2e;
+  --surface2:#252540;--surface3:#2e2e50;--text:#f0f0f0;--text2:#a0a0b0;
+  --error:#ff4d4f;--success:#52c41a;--warning:#faad14;--border:rgba(200,169,110,0.18);
+  --radius:14px;--shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;}
+/* NAV */
+.nav{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer;}
+.nav-logo{width:38px;height:38px;}
+.nav-name{font-size:1.2rem;font-weight:800;letter-spacing:1.5px;background:linear-gradient(135deg,#c8a96e,#f0d5a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-btn{padding:9px 18px;border-radius:8px;font-size:.85rem;cursor:pointer;border:none;font-weight:600;transition:all .2s;}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text);}
+/* HERO */
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#252540 50%,#1a2040 100%);padding:60px 20px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-100px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(200,169,110,0.08),transparent 70%);border-radius:50%;}
+.hero::after{content:'';position:absolute;bottom:-100px;right:-100px;width:300px;height:300px;background:radial-gradient(circle,rgba(200,169,110,0.06),transparent 70%);border-radius:50%;}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(200,169,110,0.12);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:.78rem;color:var(--primary);margin-bottom:20px;}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:900;margin-bottom:14px;line-height:1.2;}
+.hero h1 span{background:linear-gradient(135deg,#c8a96e,#f0d5a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{font-size:1.05rem;color:var(--text2);max-width:500px;margin:0 auto 32px;}
+.hero-stats{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin-bottom:36px;}
+.hero-stat{text-align:center;}
+.hero-stat-n{font-size:1.5rem;font-weight:800;color:var(--primary);}
+.hero-stat-l{font-size:.75rem;color:var(--text2);}
+.cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.cta-btn{padding:14px 32px;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;border:none;transition:all .25s;}
+.cta-primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;}
+.cta-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,169,110,0.4);}
+.cta-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+.cta-outline:hover{border-color:var(--primary);color:var(--primary);}
+/* FEATURES */
+.section{padding:48px 20px;max-width:900px;margin:0 auto;}
+.section-title{font-size:1.4rem;font-weight:800;margin-bottom:8px;}
+.section-sub{color:var(--text2);font-size:.9rem;margin-bottom:32px;}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+.feature-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px 18px;}
+.feature-icon{width:44px;height:44px;background:rgba(200,169,110,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.feature-icon svg{width:22px;height:22px;stroke:var(--primary);}
+.feature-title{font-size:.95rem;font-weight:700;margin-bottom:6px;}
+.feature-desc{font-size:.82rem;color:var(--text2);line-height:1.5;}
+/* AUTH CONTAINER */
+.auth-container{max-width:680px;margin:0 auto;padding:0 20px 60px;}
+.auth-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:12px;padding:4px;margin-bottom:28px;}
+.auth-tab{flex:1;padding:12px;background:transparent;border:none;border-radius:10px;color:var(--text2);font-size:.9rem;cursor:pointer;transition:all .25s;font-weight:500;}
+.auth-tab.active{background:var(--primary);color:#fff;font-weight:700;}
+.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px 28px;box-shadow:var(--shadow);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-group{margin-bottom:18px;}
+label{display:block;font-size:.8rem;color:var(--text2);margin-bottom:6px;font-weight:500;}
+label span.req{color:var(--error);}
+input,select,textarea{width:100%;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:.9rem;outline:none;transition:border-color .25s;}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);}
+textarea{resize:vertical;min-height:90px;}
+select option{background:var(--surface2);}
+.btn{padding:14px;border-radius:10px;border:none;font-size:1rem;font-weight:600;cursor:pointer;transition:all .25s;width:100%;}
+.btn-gold{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(200,169,110,0.4);}
+.btn-gold:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary);}
+/* MULTI-STEP REGISTRATION */
+.step-progress{display:flex;align-items:center;margin-bottom:28px;gap:0;}
+.step-item{display:flex;flex-direction:column;align-items:center;flex:1;position:relative;}
+.step-item:not(:last-child)::after{content:'';position:absolute;top:17px;left:50%;width:100%;height:2px;background:var(--border);z-index:0;}
+.step-item.done:not(:last-child)::after,.step-item.active:not(:last-child)::after{background:var(--primary);}
+.step-circle{width:34px;height:34px;border-radius:50%;border:2px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--text2);z-index:1;transition:all .3s;}
+.step-item.active .step-circle{border-color:var(--primary);background:var(--primary);color:#fff;}
+.step-item.done .step-circle{border-color:var(--primary);background:var(--primary);color:#fff;}
+.step-label{font-size:.7rem;color:var(--text2);margin-top:6px;text-align:center;}
+.step-item.active .step-label{color:var(--primary);}
+.reg-step{display:none;}
+.reg-step.active{display:block;}
+.review-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:.87rem;}
+.review-label{color:var(--text2);}
+.review-val{font-weight:600;color:var(--text);}
+/* DASHBOARD */
+.dashboard{display:none;padding:20px;max-width:960px;margin:0 auto;}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+.dash-welcome{font-size:1.3rem;font-weight:700;}
+.dash-welcome span{color:var(--primary);}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:24px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 14px;text-align:center;cursor:default;}
+.stat-n{font-size:1.4rem;font-weight:800;color:var(--primary);}
+.stat-l{font-size:.74rem;color:var(--text2);margin-top:3px;}
+.stat-delta{font-size:.7rem;margin-top:4px;}
+.delta-up{color:var(--success);}
+.delta-dn{color:var(--error);}
+.dash-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:10px;padding:4px;margin-bottom:24px;overflow-x:auto;scrollbar-width:none;}
+.dash-tabs::-webkit-scrollbar{display:none;}
+.dash-tab{white-space:nowrap;padding:9px 16px;background:transparent;border:none;border-radius:8px;color:var(--text2);font-size:.85rem;cursor:pointer;transition:all .2s;flex-shrink:0;}
+.dash-tab.active{background:var(--primary);color:#fff;font-weight:600;}
+.dash-section{display:none;}
+.dash-section.active{display:block;}
+/* PRODUCT FORM */
+.product-form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;}
+.card-title{font-size:1rem;font-weight:700;margin-bottom:18px;color:var(--primary);display:flex;align-items:center;gap:8px;}
+.card-title svg{width:18px;height:18px;}
+/* PRODUCT LIST CARDS */
+.prod-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .2s;}
+.prod-card:hover{transform:translateY(-2px);}
+.prod-card-img{width:100%;height:130px;object-fit:cover;background:var(--surface2);}
+.prod-card-body{padding:12px;}
+.prod-card-name{font-size:.88rem;font-weight:600;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.prod-card-cat{font-size:.75rem;color:var(--text2);margin-bottom:8px;}
+.prod-card-footer{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.prod-card-price{font-size:.95rem;font-weight:700;color:var(--primary);}
+.prod-card-actions{display:flex;gap:6px;margin-top:8px;}
+.prod-action-btn{flex:1;padding:7px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;font-size:.78rem;cursor:pointer;color:var(--text);transition:all .2s;font-weight:500;}
+.prod-action-btn:hover{border-color:var(--primary);color:var(--primary);}
+.prod-action-del:hover{border-color:var(--error);color:var(--error);}
+/* STATUS BADGES */
+.badge-status{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:.72rem;font-weight:600;}
+.badge-active{background:rgba(82,196,26,.15);color:var(--success);}
+.badge-pending{background:rgba(250,173,20,.15);color:var(--warning);}
+.badge-rejected,.badge-cancelled{background:rgba(255,77,79,.15);color:var(--error);}
+.badge-confirmed{background:rgba(82,196,26,.15);color:var(--success);}
+.badge-shipped{background:rgba(24,144,255,.15);color:#1890ff;}
+.badge-delivered{background:rgba(200,169,110,.15);color:var(--primary);}
+/* ORDERS */
+.order-filter-tabs{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;}
+.order-filter-tabs::-webkit-scrollbar{display:none;}
+.ofilter{white-space:nowrap;padding:7px 14px;border-radius:20px;font-size:.8rem;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);transition:all .2s;}
+.ofilter.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+.order-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;transition:border-color .2s;}
+.order-card:hover{border-color:rgba(200,169,110,.4);}
+.order-card-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;}
+.order-id{font-size:.82rem;font-weight:700;color:var(--text);}
+.order-meta{font-size:.76rem;color:var(--text2);margin-top:2px;}
+.order-amount{font-size:.95rem;font-weight:700;color:var(--primary);}
+.order-body{padding:0 16px;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;}
+.order-body.open{max-height:600px;padding:0 16px 16px;}
+.order-detail-row{display:flex;justify-content:space-between;padding:6px 0;font-size:.85rem;border-bottom:1px solid var(--border);}
+.order-detail-row:last-child{border-bottom:none;}
+.order-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.oact-btn{padding:8px 14px;border-radius:8px;font-size:.82rem;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-weight:500;transition:all .2s;}
+.oact-btn:hover{border-color:var(--primary);color:var(--primary);}
+.oact-confirm{background:rgba(82,196,26,.12);border-color:var(--success);color:var(--success);}
+.oact-ship{background:rgba(24,144,255,.12);border-color:#1890ff;color:#1890ff;}
+.oact-cancel{background:rgba(255,77,79,.08);border-color:var(--error);color:var(--error);}
+/* ANALYTICS */
+.analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:24px;}
+.analytics-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
+.analytics-card h4{font-size:.85rem;color:var(--text2);font-weight:600;margin-bottom:16px;text-transform:uppercase;letter-spacing:.5px;}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:80px;}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.bar-fill{width:100%;border-radius:4px 4px 0 0;background:linear-gradient(0deg,var(--primary-dark),var(--primary));min-height:4px;transition:height .5s ease;}
+.bar-label{font-size:.62rem;color:var(--text2);}
+.top-product-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.top-product-row:last-child{border-bottom:none;}
+.top-prod-rank{width:22px;height:22px;border-radius:50%;background:var(--primary-light,rgba(200,169,110,.12));color:var(--primary);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.top-prod-name{font-size:.85rem;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.top-prod-sales{font-size:.8rem;color:var(--primary);font-weight:600;}
+/* PROFILE */
+.profile-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:16px;}
+.profile-section h4{font-size:.9rem;font-weight:700;margin-bottom:18px;color:var(--primary);display:flex;align-items:center;gap:8px;}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:#fff;margin:0 auto 16px;border:3px solid rgba(200,169,110,.3);}
+.danger-zone{background:rgba(255,77,79,.06);border:1px solid rgba(255,77,79,.25);border-radius:var(--radius);padding:20px;margin-top:16px;}
+.danger-zone h4{color:var(--error);font-size:.88rem;font-weight:700;margin-bottom:12px;}
+.danger-btn{padding:10px 20px;background:transparent;border:1px solid var(--error);color:var(--error);border-radius:8px;font-size:.85rem;cursor:pointer;font-weight:600;transition:all .2s;}
+.danger-btn:hover{background:var(--error);color:#fff;}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.modal-title{font-size:1rem;font-weight:700;}
+.modal-close{background:none;border:none;color:var(--text2);cursor:pointer;padding:4px;}
+/* STATUS BADGE */
+.status-bar{background:rgba(200,169,110,0.1);color:var(--primary);border:1px solid var(--primary);border-radius:8px;padding:8px 14px;font-size:.82rem;text-align:center;margin-bottom:20px;}
+/* ORDERS TABLE */
+.orders-table{width:100%;border-collapse:collapse;}
+.orders-table th,.orders-table td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border);font-size:.85rem;}
+.orders-table th{color:var(--text2);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;}
+/* TOAST */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-120px);background:var(--surface);border-radius:12px;padding:14px 22px;font-size:.9rem;box-shadow:0 8px 30px rgba(0,0,0,.5);z-index:1000;transition:transform .4s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;gap:10px;min-width:280px;max-width:90vw;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.success{border-left:3px solid var(--success);}
+.toast.error{border-left:3px solid var(--error);}
+.toast.warning{border-left:3px solid var(--warning);}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.pw-toggle{position:relative;}
+.pw-toggle input{padding-right:42px;}
+.pw-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text2);cursor:pointer;padding:4px;}
+@media(max-width:600px){.two-col{grid-template-columns:1fr;}.auth-card{padding:20px 16px;}.modal-box{padding:20px 16px;}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand" onclick="goHome()">
+    <svg class="nav-logo" viewBox="0 0 38 38"><circle cx="19" cy="19" r="19" fill="url(#nl)"/><text x="19" y="25" text-anchor="middle" fill="white" font-size="11" font-weight="900" font-family="Arial">ZD</text><defs><linearGradient id="nl" x1="0" y1="0" x2="38" y2="38"><stop stop-color="#c8a96e"/><stop offset="1" stop-color="#8a6a3e"/></linearGradient></defs></svg>
+    <span class="nav-name">ZMAFRDEAL</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn btn-ghost" onclick="goHome()">Back to Store</button>
+    <button class="nav-btn btn-primary" id="navLogout" onclick="doLogout()" style="display:none;">Logout</button>
+  </div>
+</nav>
+
+<!-- ======================================================= LANDING ======================================================= -->
+<div id="sellerLanding">
+  <div class="hero">
+    <div class="hero-tag">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Earn with Zmafrdeal
+    </div>
+    <h1>Sell Across <span>Africa</span><br/>Reach Millions of Buyers</h1>
+    <p class="hero-sub">Join thousands of sellers earning daily on Zmafrdeal — Sierra Leone's fastest-growing marketplace. Start selling in minutes.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-n">50K+</div><div class="hero-stat-l">Active Buyers</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">10%</div><div class="hero-stat-l">Commission Only</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">24h</div><div class="hero-stat-l">Approval Time</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">40+</div><div class="hero-stat-l">African Countries</div></div>
+    </div>
+    <div class="cta-row">
+      <button class="cta-btn cta-primary" onclick="showAuth('register')">Start Selling Today</button>
+      <button class="cta-btn cta-outline" onclick="showAuth('login')">Seller Login</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div class="section-title">Why Sell on Zmafrdeal?</div>
+      <div class="section-sub">Everything you need to run a successful online store in Africa</div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="feature-title">Secure Payments</div>
+        <div class="feature-desc">Mobile money and pay-after-delivery options trusted across Africa.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div class="feature-title">Wide Reach</div>
+        <div class="feature-desc">Sell to buyers across 40+ African countries with currency support for all.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div class="feature-title">Easy Management</div>
+        <div class="feature-desc">Post products, manage orders, and track earnings from your dashboard.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="feature-title">Low Commission</div>
+        <div class="feature-desc">Only 10% commission per sale. Keep 90% of every purchase.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.85 3.44 2 2 0 0 1 3.83 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.98-.98a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div class="feature-title">WhatsApp Orders</div>
+        <div class="feature-desc">Receive order notifications instantly via WhatsApp and database.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="feature-title">Analytics</div>
+        <div class="feature-desc">Track views, sales, and revenue with detailed seller analytics.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== AUTH SECTION ===== -->
+  <div class="auth-container" id="authSection">
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="atLogin" onclick="showAuth('login')">Seller Login</button>
+      <button class="auth-tab" id="atRegister" onclick="showAuth('register')">Register as Seller</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="sellerLoginForm" class="auth-card">
+      <h3 style="margin-bottom:6px;">Welcome Back, Seller</h3>
+      <p style="color:var(--text2);font-size:.85rem;margin-bottom:24px;">Sign in to manage your store and orders.</p>
+      <div class="form-group">
+        <label>Email <span class="req">*</span></label>
+        <input type="email" id="slEmail" placeholder="seller@email.com" onkeydown="if(event.key==='Enter')doSellerLogin()"/>
+      </div>
+      <div class="form-group">
+        <label>Password <span class="req">*</span></label>
+        <div class="pw-toggle">
+          <input type="password" id="slPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doSellerLogin()"/>
+          <button class="pw-eye" type="button" onclick="togglePw('slPassword',this)" title="Show/hide password">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <button class="btn btn-gold" onclick="doSellerLogin()" id="slBtn">Sign In to Dashboard</button>
+      <p style="text-align:center;margin-top:14px;font-size:.82rem;color:var(--text2);">Don't have an account? <span style="color:var(--primary);cursor:pointer;" onclick="showAuth('register')">Register here</span></p>
+    </div>
+
+    <!-- REGISTER (MULTI-STEP) -->
+    <div id="sellerRegisterForm" class="auth-card" style="display:none;">
+      <h3 style="margin-bottom:6px;">Apply to Sell on Zmafrdeal</h3>
+      <p style="color:var(--text2);font-size:.85rem;margin-bottom:22px;">Complete all steps. Admin will review within 24 hours.</p>
+
+      <!-- Step Progress -->
+      <div class="step-progress" id="stepProgress">
+        <div class="step-item active" id="step1Dot">
+          <div class="step-circle">1</div>
+          <div class="step-label">Account</div>
+        </div>
+        <div class="step-item" id="step2Dot">
+          <div class="step-circle">2</div>
+          <div class="step-label">Business</div>
+        </div>
+        <div class="step-item" id="step3Dot">
+          <div class="step-circle">3</div>
+          <div class="step-label">Review</div>
+        </div>
+      </div>
+
+      <!-- Step 1: Account Info -->
+      <div class="reg-step active" id="regStep1">
+        <div class="two-col">
+          <div class="form-group">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" id="srName" placeholder="Your full name"/>
+          </div>
+          <div class="form-group">
+            <label>Email <span class="req">*</span></label>
+            <input type="email" id="srEmail" placeholder="business@email.com"/>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="form-group">
+            <label>Password <span class="req">*</span></label>
+            <div class="pw-toggle">
+              <input type="password" id="srPassword" placeholder="Min 8 characters"/>
+              <button class="pw-eye" type="button" onclick="togglePw('srPassword',this)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Confirm Password <span class="req">*</span></label>
+            <div class="pw-toggle">
+              <input type="password" id="srConfirmPw" placeholder="Repeat password"/>
+              <button class="pw-eye" type="button" onclick="togglePw('srConfirmPw',this)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="form-group">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" id="srPhone" placeholder="+232 XX XXX XXX"/>
+          </div>
+          <div class="form-group">
+            <label>Country <span class="req">*</span></label>
+            <select id="srCountry">
+              <option value="Sierra Leone" selected>Sierra Leone</option>
+              <option>Zambia</option><option>DRC Congo</option><option>Rep. Congo</option>
+              <option>Uganda</option><option>Nigeria</option><option>Ghana</option>
+              <option>Kenya</option><option>Tanzania</option><option>South Africa</option>
+              <option>Ethiopia</option><option>Senegal</option><option>Cameroon</option>
+              <option>Rwanda</option><option>Zimbabwe</option><option>Angola</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-gold" onclick="goStep(2)">Continue to Business Info</button>
+        <p style="text-align:center;margin-top:12px;font-size:.82rem;color:var(--text2);">Already have an account? <span style="color:var(--primary);cursor:pointer;" onclick="showAuth('login')">Login here</span></p>
+      </div>
+
+      <!-- Step 2: Business Info -->
+      <div class="reg-step" id="regStep2">
+        <div class="two-col">
+          <div class="form-group">
+            <label>Business Name <span class="req">*</span></label>
+            <input type="text" id="srBusiness" placeholder="Your store name"/>
+          </div>
+          <div class="form-group">
+            <label>Business Type <span class="req">*</span></label>
+            <select id="srBusinessType">
+              <option value="">Select type</option>
+              <option>Retail Store</option>
+              <option>Wholesale</option>
+              <option>Individual Seller</option>
+              <option>Manufacturer</option>
+              <option>Distributor</option>
+              <option>Importer</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="form-group">
+            <label>National ID / Passport</label>
+            <input type="text" id="srIdNum" placeholder="ID number (optional)"/>
+          </div>
+          <div class="form-group">
+            <label>Business Address</label>
+            <input type="text" id="srAddress" placeholder="City, Street"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Business Description <span class="req">*</span></label>
+          <textarea id="srDesc" placeholder="Describe your business and the products you plan to sell. Be detailed to increase approval chances..." style="min-height:110px;"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-outline" onclick="goStep(1)" style="width:auto;padding:14px 22px;">Back</button>
+          <button class="btn btn-gold" onclick="goStep(3)">Review Application</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Review & Submit -->
+      <div class="reg-step" id="regStep3">
+        <div style="background:var(--surface2);border-radius:12px;padding:18px;margin-bottom:20px;">
+          <div style="font-size:.88rem;font-weight:700;color:var(--primary);margin-bottom:14px;">Review Your Details</div>
+          <div class="review-row"><span class="review-label">Full Name</span><span class="review-val" id="rv-name">—</span></div>
+          <div class="review-row"><span class="review-label">Email</span><span class="review-val" id="rv-email">—</span></div>
+          <div class="review-row"><span class="review-label">Phone</span><span class="review-val" id="rv-phone">—</span></div>
+          <div class="review-row"><span class="review-label">Country</span><span class="review-val" id="rv-country">—</span></div>
+          <div class="review-row"><span class="review-label">Business Name</span><span class="review-val" id="rv-biz">—</span></div>
+          <div class="review-row"><span class="review-label">Business Type</span><span class="review-val" id="rv-btype">—</span></div>
+          <div class="review-row" style="border:none;"><span class="review-label">Address</span><span class="review-val" id="rv-addr">—</span></div>
+        </div>
+        <div style="background:rgba(200,169,110,.08);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:20px;font-size:.82rem;color:var(--text2);line-height:1.7;">
+          By submitting, you agree to Zmafrdeal's seller terms and conditions. Admin will review within 24 hours. You'll be notified by email once approved.
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-outline" onclick="goStep(2)" style="width:auto;padding:14px 22px;" id="backBtn2">Back</button>
+          <button class="btn btn-gold" onclick="doSellerRegister()" id="srBtn">Submit Application</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================= DASHBOARD ======================================================= -->
+<div class="dashboard" id="sellerDashboard">
+  <div class="dash-header">
+    <div>
+      <div class="dash-welcome">Welcome, <span id="sellerName">Seller</span></div>
+      <div style="font-size:.78rem;color:var(--text2);margin-top:2px;" id="sellerStoreName"></div>
+    </div>
+    <div id="sellerStatusBadge"></div>
+  </div>
+
+  <div class="stats-row" id="statsRow">
+    <div class="stat-card">
+      <div class="stat-n" id="statProducts">0</div>
+      <div class="stat-l">Products</div>
+      <div class="stat-delta" id="statProductsDelta"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n" id="statOrders">0</div>
+      <div class="stat-l">Total Orders</div>
+      <div class="stat-delta delta-up" id="statOrdersDelta"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n" id="statRevenue">0</div>
+      <div class="stat-l">Revenue (<span class="curr-label">SLL</span>)</div>
+      <div class="stat-delta delta-up" id="statRevenueDelta"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n" id="statPending">0</div>
+      <div class="stat-l">Pending Orders</div>
+      <div class="stat-delta" id="statPendingDelta"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n" id="statViews">0</div>
+      <div class="stat-l">Product Views</div>
+    </div>
+  </div>
+
+  <div class="dash-tabs">
+    <button class="dash-tab active" onclick="switchDash('products')">My Products</button>
+    <button class="dash-tab" onclick="switchDash('addProduct')">Post Product</button>
+    <button class="dash-tab" onclick="switchDash('orders')">Orders</button>
+    <button class="dash-tab" onclick="switchDash('analytics')">Analytics</button>
+    <button class="dash-tab" onclick="switchDash('profile')">My Profile</button>
+  </div>
+
+  <!-- ===== PRODUCTS LIST ===== -->
+  <div class="dash-section active" id="dashProducts">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div style="font-size:.88rem;color:var(--text2);" id="prodListCount"></div>
+      <button class="nav-btn btn-primary" style="padding:9px 16px;font-size:.82rem;" onclick="switchDash('addProduct')">+ Post New Product</button>
+    </div>
+    <div id="productsList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;"></div>
+    <div id="noProducts" style="text-align:center;padding:48px;color:var(--text2);display:none;">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="margin:0 auto 14px;display:block;opacity:.4;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <div style="font-size:1rem;margin-bottom:8px;">No products yet</div>
+      <div style="font-size:.85rem;margin-bottom:18px;">Click "Post Product" to list your first product.</div>
+      <button class="btn btn-gold" style="width:auto;padding:12px 28px;" onclick="switchDash('addProduct')">Post Your First Product</button>
+    </div>
+  </div>
+
+  <!-- ===== ADD PRODUCT ===== -->
+  <div class="dash-section" id="dashAddProduct">
+    <div class="product-form-card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> Product Info
+      </div>
+      <div class="form-group">
+        <label>Product Name <span class="req">*</span></label>
+        <input type="text" id="pName" placeholder="Full product name"/>
+      </div>
+      <div class="two-col">
+        <div class="form-group">
+          <label>Category <span class="req">*</span></label>
+          <select id="pCategory"><option value="">Select category</option></select>
+        </div>
+        <div class="form-group">
+          <label>Brand</label>
+          <input type="text" id="pBrand" placeholder="Brand name"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Description <span class="req">*</span></label>
+        <textarea id="pDesc" placeholder="Full product description..." style="min-height:110px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Specifications (one per line)</label>
+        <textarea id="pSpecs" placeholder="- Battery: 5000mAh&#10;- Screen: 6.5 inch&#10;- Camera: 48MP"></textarea>
+      </div>
+      <div class="form-group">
+        <label>How to Use (optional)</label>
+        <textarea id="pHowToUse" placeholder="Step-by-step instructions..."></textarea>
+      </div>
+    </div>
+
+    <div class="product-form-card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Pricing &amp; Stock
+      </div>
+      <div class="two-col">
+        <div class="form-group">
+          <label>Price (<span class="curr-label">SLL</span>) <span class="req">*</span></label>
+          <input type="number" id="pPrice" placeholder="0" min="0"/>
+        </div>
+        <div class="form-group">
+          <label>Previous Price (<span class="curr-label">SLL</span>)</label>
+          <input type="number" id="pPrevPrice" placeholder="0 (for showing discount)" min="0"/>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="form-group">
+          <label>Stock Available <span class="req">*</span></label>
+          <input type="number" id="pStock" placeholder="0" min="0"/>
+        </div>
+        <div class="form-group">
+          <label>Shipping Fee (<span class="curr-label">SLL</span>)</label>
+          <input type="number" id="pShipping" placeholder="0" min="0"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-form-card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Colours &amp; Sizes
+      </div>
+      <div class="two-col">
+        <div class="form-group">
+          <label>Available Colours (comma separated)</label>
+          <input type="text" id="pColors" placeholder="Red, Blue, Black, White"/>
+        </div>
+        <div class="form-group">
+          <label>Available Sizes (comma separated)</label>
+          <input type="text" id="pSizes" placeholder="S, M, L, XL or 38, 39, 40"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-form-card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Product Photos
+      </div>
+
+      <!-- Main Photo -->
+      <div class="form-group">
+        <label>Main Product Photo <span class="req">*</span></label>
+        <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;">
+          <div id="sHomePreview" style="width:88px;height:88px;border:2px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;background:var(--surface3);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div style="flex:1;min-width:160px;">
+            <label style="display:inline-flex;align-items:center;gap:8px;background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;cursor:pointer;font-size:.85rem;color:var(--text);width:100%;justify-content:center;margin-bottom:8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Upload Main Photo
+              <input type="file" accept="image/*" style="display:none;" onchange="sUploadHome(this)"/>
+            </label>
+            <div style="font-size:.73rem;color:var(--text2);margin-bottom:4px;">Or paste image URL:</div>
+            <input type="url" id="pHomePhoto" placeholder="https://..." oninput="sPreviewHome(this.value)"/>
+            <div id="sHomeStatus" style="font-size:.75rem;margin-top:4px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gallery Upload -->
+      <div class="form-group">
+        <label>Gallery Photos (add 3–6 for better visibility)</label>
+        <div id="sGalleryZone" style="border:2px dashed var(--border);border-radius:10px;padding:22px;text-align:center;cursor:pointer;transition:border-color .25s;" onclick="document.getElementById('sGalleryInput').click()" ondragover="event.preventDefault();this.style.borderColor='var(--primary)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="sDrop(event)">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="1.5" style="margin:0 auto 8px;display:block;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div style="color:var(--text2);font-size:.85rem;">Drag photos here or click to select multiple</div>
+          <div style="color:var(--text2);font-size:.75rem;margin-top:4px;">JPG, PNG, WebP supported</div>
+          <input type="file" id="sGalleryInput" accept="image/*" multiple style="display:none;" onchange="sUploadGallery(this.files)"/>
+        </div>
+        <div id="sGalleryGrid" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;"></div>
+        <div id="sGalleryStatus" style="font-size:.75rem;margin-top:6px;color:var(--primary);"></div>
+        <div style="font-size:.73rem;color:var(--text2);margin-top:8px;">Or paste comma-separated URLs:</div>
+        <textarea id="pScrollPhotos" placeholder="https://img1.jpg, https://img2.jpg, ..." style="margin-top:6px;"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Additional Photos (more views, packaging, etc.)</label>
+        <div style="border:2px dashed var(--border);border-radius:10px;padding:16px;text-align:center;cursor:pointer;" onclick="document.getElementById('sMoreInput').click()">
+          <div style="color:var(--text2);font-size:.82rem;">+ Add more product photos</div>
+          <input type="file" id="sMoreInput" accept="image/*" multiple style="display:none;" onchange="sUploadMore(this.files)"/>
+        </div>
+        <div id="sMoreGrid" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;"></div>
+        <textarea id="pMorePhotos" placeholder="Or paste URLs: https://img1.jpg, https://img2.jpg, ..." style="min-height:70px;margin-top:8px;"></textarea>
+      </div>
+    </div>
+
+    <button class="btn btn-gold" onclick="doPostProduct()" id="postBtn">Submit Product for Approval</button>
+    <p style="text-align:center;margin-top:10px;font-size:.78rem;color:var(--text2);">Your product will be reviewed by admin before appearing in the store.</p>
+  </div>
+
+  <!-- ===== ORDERS ===== -->
+  <div class="dash-section" id="dashOrders">
+    <div class="order-filter-tabs" id="orderFilterTabs">
+      <button class="ofilter active" onclick="filterOrders('all',this)">All Orders</button>
+      <button class="ofilter" onclick="filterOrders('pending',this)">Pending</button>
+      <button class="ofilter" onclick="filterOrders('confirmed',this)">Confirmed</button>
+      <button class="ofilter" onclick="filterOrders('shipped',this)">Shipped</button>
+      <button class="ofilter" onclick="filterOrders('completed',this)">Completed</button>
+      <button class="ofilter" onclick="filterOrders('cancelled',this)">Cancelled</button>
+    </div>
+    <div id="ordersContainer"></div>
+    <div id="noOrders" style="text-align:center;padding:48px;color:var(--text2);display:none;">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="margin:0 auto 14px;display:block;opacity:.4;"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <div>No orders found for this filter</div>
+    </div>
+  </div>
+
+  <!-- ===== ANALYTICS ===== -->
+  <div class="dash-section" id="dashAnalytics">
+    <div class="analytics-grid">
+      <div class="analytics-card" style="grid-column: span 2;">
+        <h4>Revenue Last 6 Months</h4>
+        <div class="bar-chart" id="revenueChart" style="height:100px;"></div>
+      </div>
+      <div class="analytics-card">
+        <h4>Top Products</h4>
+        <div id="topProductsList"></div>
+      </div>
+      <div class="analytics-card">
+        <h4>Order Summary</h4>
+        <div id="orderSummaryChart"></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;">
+      <h4 style="font-size:.85rem;color:var(--text2);font-weight:600;margin-bottom:16px;text-transform:uppercase;letter-spacing:.5px;">Performance Overview</h4>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;" id="perfStats"></div>
+    </div>
+  </div>
+
+  <!-- ===== PROFILE ===== -->
+  <div class="dash-section" id="dashProfile">
+    <!-- Store Identity -->
+    <div class="profile-section">
+      <h4>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Store Identity
+      </h4>
+      <div class="profile-avatar" id="profileAvatar">ZD</div>
+      <div class="two-col">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="editName" placeholder="Your full name"/>
+        </div>
+        <div class="form-group">
+          <label>Business Name</label>
+          <input type="text" id="editBusiness" placeholder="Your store name"/>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="editPhone" placeholder="+232 XX XXX XXX"/>
+        </div>
+        <div class="form-group">
+          <label>WhatsApp Number</label>
+          <input type="tel" id="editWhatsApp" placeholder="+232 XX XXX XXX"/>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="form-group">
+          <label>Country</label>
+          <select id="editCountry">
+            <option>Sierra Leone</option><option>Zambia</option><option>DRC Congo</option>
+            <option>Uganda</option><option>Nigeria</option><option>Ghana</option>
+            <option>Kenya</option><option>Tanzania</option><option>South Africa</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Business Type</label>
+          <select id="editBizType">
+            <option>Retail Store</option><option>Wholesale</option><option>Individual Seller</option>
+            <option>Manufacturer</option><option>Distributor</option><option>Importer</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Business Address</label>
+        <input type="text" id="editAddress" placeholder="City, Street Address"/>
+      </div>
+      <div class="form-group">
+        <label>Business Description</label>
+        <textarea id="editDesc" placeholder="Describe your store..."></textarea>
+      </div>
+      <button class="btn btn-gold" onclick="saveProfile()" id="saveProfileBtn">Save Changes</button>
+    </div>
+
+    <!-- Change Password -->
+    <div class="profile-section">
+      <h4>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Change Password
+      </h4>
+      <div class="form-group">
+        <label>Current Password</label>
+        <div class="pw-toggle">
+          <input type="password" id="pwCurrent" placeholder="••••••••"/>
+          <button class="pw-eye" type="button" onclick="togglePw('pwCurrent',this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="form-group">
+          <label>New Password</label>
+          <div class="pw-toggle">
+            <input type="password" id="pwNew" placeholder="Min 8 characters"/>
+            <button class="pw-eye" type="button" onclick="togglePw('pwNew',this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Confirm New Password</label>
+          <div class="pw-toggle">
+            <input type="password" id="pwConfirm" placeholder="Repeat new password"/>
+            <button class="pw-eye" type="button" onclick="togglePw('pwConfirm',this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-gold" onclick="changePassword()" id="changePwBtn">Change Password</button>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="danger-zone">
+      <h4>Danger Zone</h4>
+      <p style="font-size:.82rem;color:var(--text2);margin-bottom:14px;">These actions are irreversible. Please be certain.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="danger-btn" onclick="confirmDeactivate()">Deactivate Store</button>
+        <button class="danger-btn" onclick="confirmDeleteAccount()">Delete Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== EDIT PRODUCT MODAL ===== -->
+<div class="modal-overlay" id="editProductModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">Edit Product</span>
+      <button class="modal-close" onclick="closeEditModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <input type="hidden" id="editProdId"/>
+    <div class="form-group"><label>Product Name</label><input type="text" id="editPName"/></div>
+    <div class="two-col">
+      <div class="form-group"><label>Price (<span class="curr-label">SLL</span>)</label><input type="number" id="editPPrice"/></div>
+      <div class="form-group"><label>Previous Price</label><input type="number" id="editPPrevPrice"/></div>
+    </div>
+    <div class="two-col">
+      <div class="form-group"><label>Stock</label><input type="number" id="editPStock"/></div>
+      <div class="form-group"><label>Shipping Fee</label><input type="number" id="editPShipping"/></div>
+    </div>
+    <div class="form-group"><label>Description</label><textarea id="editPDesc" style="min-height:80px;"></textarea></div>
+    <div class="form-group"><label>Main Photo URL</label><input type="url" id="editPPhoto" placeholder="https://..."/></div>
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-gold" onclick="saveEditProduct()" id="editSaveBtn">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <svg id="toastIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+const API = 'https://products-store-3g52.onrender.com';
+
+window.ZM = (function() {
+  try { const s = JSON.parse(localStorage.getItem('zm_settings') || '{}'); if (s.code) return s; } catch(e) {}
+  return { code: 'SLL', symbol: 'Le', name: 'Sierra Leonean Leone', country: 'Sierra Leone' };
+})();
+async function fetchStoreSettings() {
+  try {
+    const res = await fetch(API + '/api/settings');
+    const data = await res.json();
+    if (data.success && data.data) {
+      const s = data.data;
+      window.ZM = { code: s.default_currency || 'SLL', symbol: s.currency_symbol || 'Le', name: s.currency_name || 'Sierra Leonean Leone', country: s.default_country || 'Sierra Leone' };
+      localStorage.setItem('zm_settings', JSON.stringify({ ...window.ZM, ts: Date.now() }));
+      document.querySelectorAll('.curr-label').forEach(el => { el.textContent = window.ZM.code; });
+    }
+  } catch(e) {}
+}
+window.addEventListener('storage', e => {
+  if (e.key === 'zm_settings' && e.newValue) {
+    try {
+      window.ZM = JSON.parse(e.newValue);
+      document.querySelectorAll('.curr-label').forEach(el => { el.textContent = window.ZM.code; });
+    } catch(_) {}
+  }
+});
+fetchStoreSettings();
+let token = localStorage.getItem('zm_token');
+let sellerData = null;
+let allOrders = [];
+let currentRegStep = 1;
+
+// ==================== TOAST ====================
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  const icon = document.getElementById('toastIcon');
+  document.getElementById('toastMsg').textContent = msg;
+  if (type === 'success') icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+  else if (type === 'error') icon.innerHTML = '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>';
+  else icon.innerHTML = '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>';
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+function goHome() { window.location.href = 'index.html'; }
+
+// ==================== PASSWORD TOGGLE ====================
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.innerHTML = show
+    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+}
+
+// ==================== AUTH TABS ====================
+function showAuth(tab) {
+  document.getElementById('authSection').scrollIntoView({ behavior: 'smooth' });
+  if (tab === 'login') {
+    document.getElementById('sellerLoginForm').style.display = 'block';
+    document.getElementById('sellerRegisterForm').style.display = 'none';
+    document.getElementById('atLogin').classList.add('active');
+    document.getElementById('atRegister').classList.remove('active');
+  } else {
+    document.getElementById('sellerLoginForm').style.display = 'none';
+    document.getElementById('sellerRegisterForm').style.display = 'block';
+    document.getElementById('atLogin').classList.remove('active');
+    document.getElementById('atRegister').classList.add('active');
+    goStep(1);
+  }
+}
+
+// ==================== MULTI-STEP REGISTRATION ====================
+function goStep(step) {
+  const errors = { 1: validateStep1, 2: validateStep2 };
+  if (step > currentRegStep && errors[currentRegStep]) {
+    const err = errors[currentRegStep]();
+    if (err) { showToast(err, 'error'); return; }
+  }
+  if (step === 3) populateReview();
+
+  document.querySelectorAll('.reg-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('regStep' + step).classList.add('active');
+
+  [1,2,3].forEach(i => {
+    const dot = document.getElementById('step' + i + 'Dot');
+    dot.classList.remove('active', 'done');
+    if (i < step) dot.classList.add('done');
+    else if (i === step) dot.classList.add('active');
+  });
+  currentRegStep = step;
+}
+
+function validateStep1() {
+  const name = document.getElementById('srName').value.trim();
+  const email = document.getElementById('srEmail').value.trim();
+  const pw = document.getElementById('srPassword').value;
+  const cpw = document.getElementById('srConfirmPw').value;
+  const phone = document.getElementById('srPhone').value.trim();
+  if (!name) return 'Please enter your full name';
+  if (!email || !/\S+@\S+\.\S+/.test(email)) return 'Please enter a valid email address';
+  if (!pw || pw.length < 8) return 'Password must be at least 8 characters';
+  if (pw !== cpw) return 'Passwords do not match';
+  if (!phone) return 'Please enter your phone number';
+  return null;
+}
+
+function validateStep2() {
+  const biz = document.getElementById('srBusiness').value.trim();
+  const btype = document.getElementById('srBusinessType').value;
+  const desc = document.getElementById('srDesc').value.trim();
+  if (!biz) return 'Please enter your business name';
+  if (!btype) return 'Please select your business type';
+  if (!desc || desc.length < 30) return 'Business description is too short (min 30 characters)';
+  return null;
+}
+
+function populateReview() {
+  document.getElementById('rv-name').textContent = document.getElementById('srName').value || '—';
+  document.getElementById('rv-email').textContent = document.getElementById('srEmail').value || '—';
+  document.getElementById('rv-phone').textContent = document.getElementById('srPhone').value || '—';
+  document.getElementById('rv-country').textContent = document.getElementById('srCountry').value || '—';
+  document.getElementById('rv-biz').textContent = document.getElementById('srBusiness').value || '—';
+  document.getElementById('rv-btype').textContent = document.getElementById('srBusinessType').value || '—';
+  document.getElementById('rv-addr').textContent = document.getElementById('srAddress').value || 'Not provided';
+}
+
+// ==================== SELLER LOGIN ====================
+async function doSellerLogin() {
+  const email = document.getElementById('slEmail').value.trim();
+  const pw = document.getElementById('slPassword').value;
+  if (!email || !pw) { showToast('Enter email and password', 'error'); return; }
+  const btn = document.getElementById('slBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Signing in...';
+  try {
+    const res = await fetch(API + '/api/sellers/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password: pw }) });
+    const data = await res.json();
+    if (!data.success) { showToast(data.error, 'error'); btn.disabled = false; btn.textContent = 'Sign In to Dashboard'; return; }
+    token = data.data.session.access_token;
+    localStorage.setItem('zm_token', token);
+    sellerData = data.data;
+    showDashboard(data.data);
+  } catch (e) { showToast('Connection error — check your internet', 'error'); btn.disabled = false; btn.textContent = 'Sign In to Dashboard'; }
+}
+
+// ==================== SELLER REGISTER ====================
+async function doSellerRegister() {
+  const btn = document.getElementById('srBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Submitting...';
+  try {
+    const res = await fetch(API + '/api/sellers/apply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        full_name: document.getElementById('srName').value.trim(),
+        email: document.getElementById('srEmail').value.trim(),
+        password: document.getElementById('srPassword').value,
+        business_name: document.getElementById('srBusiness').value.trim(),
+        business_type: document.getElementById('srBusinessType').value,
+        phone: document.getElementById('srPhone').value.trim(),
+        country: document.getElementById('srCountry').value,
+        id_number: document.getElementById('srIdNum').value,
+        address: document.getElementById('srAddress').value,
+        description: document.getElementById('srDesc').value.trim()
+      })
+    });
+    const data = await res.json();
+    if (!data.success) { showToast(data.error, 'error'); btn.disabled = false; btn.textContent = 'Submit Application'; return; }
+    showToast('Application submitted! Admin will review within 24 hours.');
+    btn.textContent = 'Application Submitted';
+    document.getElementById('srBtn').parentElement.innerHTML = `
+      <div style="text-align:center;padding:20px 0;">
+        <div style="width:52px;height:52px;background:rgba(82,196,26,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div style="font-size:1.05rem;font-weight:700;margin-bottom:8px;">Application Submitted!</div>
+        <div style="font-size:.85rem;color:var(--text2);margin-bottom:20px;">You'll receive an email within 24 hours once approved.</div>
+        <button class="btn btn-gold" style="width:auto;padding:12px 28px;" onclick="showAuth('login')">Go to Login</button>
+      </div>`;
+  } catch (e) { showToast('Connection error', 'error'); btn.disabled = false; btn.textContent = 'Submit Application'; }
+}
+
+// ==================== DASHBOARD ====================
+function switchDash(tab) {
+  document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+  const map = { products: 0, addProduct: 1, orders: 2, analytics: 3, profile: 4 };
+  const key = tab.charAt(0).toUpperCase() + tab.slice(1);
+  document.getElementById('dash' + key).classList.add('active');
+  document.querySelectorAll('.dash-tab')[map[tab]]?.classList.add('active');
+  if (tab === 'products') loadDashboardProducts();
+  if (tab === 'orders') loadOrders();
+  if (tab === 'analytics') loadAnalytics();
+  // close side menu if open
+  document.getElementById('editProductModal').classList.remove('open');
+}
+
+function showDashboard(data) {
+  document.getElementById('sellerLanding').style.display = 'none';
+  document.getElementById('sellerDashboard').style.display = 'block';
+  document.getElementById('navLogout').style.display = 'block';
+
+  const pName = data.profile?.full_name || data.seller?.full_name || 'Seller';
+  const bName = data.seller?.business_name || '';
+  document.getElementById('sellerName').textContent = pName;
+  if (bName) document.getElementById('sellerStoreName').textContent = bName;
+  document.getElementById('profileAvatar').textContent = pName.charAt(0).toUpperCase();
+
+  const status = data.seller?.status;
+  const badge = document.getElementById('sellerStatusBadge');
+  if (status === 'pending') badge.innerHTML = '<div class="status-bar">Application Pending — Admin is reviewing your application</div>';
+  else if (status === 'rejected') badge.innerHTML = '<div class="status-bar" style="border-color:var(--error);color:var(--error);background:rgba(255,77,79,0.08);">Application Rejected — Contact support</div>';
+
+  const prods = data.products || [];
+  const orders = data.orders || [];
+  allOrders = orders;
+  document.getElementById('statProducts').textContent = prods.length;
+  document.getElementById('statOrders').textContent = orders.length;
+  document.getElementById('statRevenue').textContent = Math.round(data.total_revenue || 0).toLocaleString();
+  document.getElementById('statPending').textContent = orders.filter(o => o.status === 'pending').length;
+  document.getElementById('statViews').textContent = prods.reduce((s, p) => s + (p.views_count || 0), 0).toLocaleString();
+
+  if (data.seller) {
+    document.getElementById('editName').value = pName;
+    document.getElementById('editBusiness').value = data.seller.business_name || '';
+    document.getElementById('editPhone').value = data.seller.phone || '';
+    document.getElementById('editWhatsApp').value = data.seller.whatsapp || '';
+    document.getElementById('editAddress').value = data.seller.address || '';
+    document.getElementById('editDesc').value = data.seller.description || '';
+    const ctry = document.getElementById('editCountry');
+    if (data.seller.country) Array.from(ctry.options).forEach(o => { if (o.value === data.seller.country) o.selected = true; });
+    const btype = document.getElementById('editBizType');
+    if (data.seller.business_type) Array.from(btype.options).forEach(o => { if (o.value === data.seller.business_type) o.selected = true; });
+  }
+
+  loadCategories();
+  loadDashboardProducts();
+}
+
+// ==================== CATEGORIES ====================
+async function loadCategories() {
+  try {
+    const res = await fetch(API + '/api/categories');
+    const data = await res.json();
+    if (data.success) {
+      const sel = document.getElementById('pCategory');
+      if (sel.options.length <= 1) data.data.forEach(c => sel.innerHTML += `<option value="${c.name}">${c.name}</option>`);
+    }
+  } catch (e) {}
+}
+
+// ==================== PRODUCTS LIST ====================
+async function loadDashboardProducts() {
+  if (!token) return;
+  try {
+    const res = await fetch(API + '/api/sellers/dashboard', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    if (!data.success) return;
+    const prods = data.data.products || [];
+    const list = document.getElementById('productsList');
+    const noP = document.getElementById('noProducts');
+    document.getElementById('prodListCount').textContent = prods.length + ' product' + (prods.length !== 1 ? 's' : '');
+    if (!prods.length) { list.innerHTML = ''; noP.style.display = 'block'; return; }
+    noP.style.display = 'none';
+    list.innerHTML = prods.map(p => `
+      <div class="prod-card">
+        ${p.home_photo
+          ? `<img class="prod-card-img" src="${p.home_photo}" alt="${p.name}" onerror="this.style.display='none'"/>`
+          : `<div class="prod-card-img" style="display:flex;align-items:center;justify-content:center;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`}
+        <div class="prod-card-body">
+          <div class="prod-card-name" title="${p.name}">${p.name}</div>
+          <div class="prod-card-cat">${p.category || ''}</div>
+          <div class="prod-card-footer">
+            <div class="prod-card-price">${window.ZM.code} ${Number(p.price).toLocaleString()}</div>
+            <span class="badge-status badge-${p.status === 'active' ? 'active' : p.status === 'pending_approval' ? 'pending' : 'rejected'}">${p.status === 'pending_approval' ? 'Pending' : p.status}</span>
+          </div>
+          <div style="font-size:.76rem;color:var(--text2);">Stock: ${p.stock_available} &nbsp;|&nbsp; Sales: ${p.sales_count || 0} &nbsp;|&nbsp; Views: ${p.views_count || 0}</div>
+          <div class="prod-card-actions">
+            <button class="prod-action-btn" onclick="openEditModal('${p.id}')">Edit</button>
+            <button class="prod-action-btn prod-action-del" onclick="deleteProduct('${p.id}','${p.name}')">Delete</button>
+          </div>
+        </div>
+      </div>`).join('');
+  } catch (e) { showToast('Failed to load products', 'error'); }
+}
+
+async function deleteProduct(id, name) {
+  zmConfirm(`Delete "${name}"? This cannot be undone.`, 'Delete Product', async () => {
+    try {
+      const res = await fetch(API + '/api/products/' + id, { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } });
+      const data = await res.json();
+      if (data.success) { showToast('Product deleted'); loadDashboardProducts(); }
+      else showToast(data.error || 'Could not delete', 'error');
+    } catch (e) { showToast('Connection error', 'error'); }
+  }, null, 'Delete', true);
+}
+
+// ==================== EDIT PRODUCT MODAL ====================
+async function openEditModal(id) {
+  try {
+    const res = await fetch(API + '/api/products/' + id, { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    if (!data.success) { showToast('Could not load product', 'error'); return; }
+    const p = data.data;
+    document.getElementById('editProdId').value = id;
+    document.getElementById('editPName').value = p.name || '';
+    document.getElementById('editPPrice').value = p.price || '';
+    document.getElementById('editPPrevPrice').value = p.previous_price || '';
+    document.getElementById('editPStock').value = p.stock_available || '';
+    document.getElementById('editPShipping').value = p.shipping_fee || '';
+    document.getElementById('editPDesc').value = p.description || '';
+    document.getElementById('editPPhoto').value = p.home_photo || '';
+    document.getElementById('editProductModal').classList.add('open');
+  } catch (e) {
+    // If API fails, open modal with id only for partial edit
+    document.getElementById('editProdId').value = id;
+    document.getElementById('editProductModal').classList.add('open');
+  }
+}
+
+function closeEditModal() { document.getElementById('editProductModal').classList.remove('open'); }
+
+async function saveEditProduct() {
+  const id = document.getElementById('editProdId').value;
+  const btn = document.getElementById('editSaveBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    const res = await fetch(API + '/api/products/' + id, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({
+        name: document.getElementById('editPName').value.trim(),
+        price: parseFloat(document.getElementById('editPPrice').value) || 0,
+        previous_price: parseFloat(document.getElementById('editPPrevPrice').value) || null,
+        stock_available: parseInt(document.getElementById('editPStock').value) || 0,
+        shipping_fee: parseFloat(document.getElementById('editPShipping').value) || 0,
+        description: document.getElementById('editPDesc').value.trim(),
+        home_photo: document.getElementById('editPPhoto').value.trim()
+      })
+    });
+    const data = await res.json();
+    if (data.success) { showToast('Product updated!'); closeEditModal(); loadDashboardProducts(); }
+    else showToast(data.error, 'error');
+  } catch (e) { showToast('Connection error', 'error'); }
+  btn.disabled = false; btn.textContent = 'Save Changes';
+}
+
+// ==================== POST PRODUCT ====================
+async function doPostProduct() {
+  const name = document.getElementById('pName').value.trim();
+  const cat = document.getElementById('pCategory').value;
+  const desc = document.getElementById('pDesc').value.trim();
+  const price = document.getElementById('pPrice').value;
+  const stock = document.getElementById('pStock').value;
+  const homePhoto = document.getElementById('pHomePhoto').value.trim();
+
+  if (!name || !cat || !desc || !price || !stock || !homePhoto) {
+    showToast('Fill all required fields (name, category, description, price, stock, main photo)', 'error'); return;
+  }
+
+  const scrollPhotos = document.getElementById('pScrollPhotos').value.split(',').map(s => s.trim()).filter(Boolean);
+  const morePhotos = document.getElementById('pMorePhotos').value.split(',').map(s => s.trim()).filter(Boolean);
+  const colors = document.getElementById('pColors').value.split(',').map(s => s.trim()).filter(Boolean);
+  const sizes = document.getElementById('pSizes').value.split(',').map(s => s.trim()).filter(Boolean);
+
+  const btn = document.getElementById('postBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Posting product...';
+
+  try {
+    const res = await fetch(API + '/api/products', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({
+        name, category: cat, description: desc,
+        brand: document.getElementById('pBrand').value,
+        specifications: document.getElementById('pSpecs').value,
+        how_to_use: document.getElementById('pHowToUse').value,
+        price: parseFloat(price),
+        previous_price: parseFloat(document.getElementById('pPrevPrice').value) || null,
+        stock_available: parseInt(stock),
+        shipping_fee: parseFloat(document.getElementById('pShipping').value) || 0,
+        home_photo: homePhoto,
+        auto_scroll_photos: scrollPhotos, more_photos: morePhotos, colors, sizes
+      })
+    });
+    const data = await res.json();
+    if (!data.success) { showToast(data.error, 'error'); btn.disabled = false; btn.textContent = 'Submit Product for Approval'; return; }
+    showToast('Product submitted for approval!');
+    btn.disabled = false; btn.textContent = 'Submit Product for Approval';
+    // Clear form
+    ['pName','pBrand','pDesc','pSpecs','pHowToUse','pPrice','pPrevPrice','pStock','pShipping','pColors','pSizes','pHomePhoto','pScrollPhotos','pMorePhotos'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    document.getElementById('sGalleryGrid').innerHTML = '';
+    document.getElementById('sMoreGrid').innerHTML = '';
+    document.getElementById('sHomePreview').innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
+    switchDash('products');
+  } catch (e) { showToast('Connection error', 'error'); btn.disabled = false; btn.textContent = 'Submit Product for Approval'; }
+}
+
+// ==================== ORDERS ====================
+async function loadOrders() {
+  if (!token) return;
+  document.getElementById('ordersContainer').innerHTML = '<div style="text-align:center;padding:32px;color:var(--text2);">Loading orders...</div>';
+  document.getElementById('noOrders').style.display = 'none';
+  try {
+    const res = await fetch(API + '/api/sellers/dashboard', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || 'Failed');
+    const raw = data.data?.orders || [];
+    // Parse delivery_info JSONB into a helper field so renderOrders can read it
+    allOrders = raw.map(o => {
+      let d = o.delivery_info || {};
+      if (typeof d === 'string') { try { d = JSON.parse(d); } catch(e) { d = {}; } }
+      return { ...o, _delivery: d };
+    });
+    renderOrders(allOrders);
+  } catch (e) {
+    document.getElementById('ordersContainer').innerHTML = `<div style="text-align:center;padding:32px;color:var(--error);">Failed to load orders. <button onclick="loadOrders()" style="color:var(--primary);background:none;border:none;cursor:pointer;text-decoration:underline;">Retry</button></div>`;
+  }
+}
+
+function filterOrders(status, btn) {
+  document.querySelectorAll('.ofilter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = status === 'all' ? allOrders : allOrders.filter(o => o.status === status);
+  renderOrders(filtered);
+}
+
+function renderOrders(orders) {
+  const container = document.getElementById('ordersContainer');
+  const noO = document.getElementById('noOrders');
+  if (!orders.length) { container.innerHTML = ''; noO.style.display = 'block'; return; }
+  noO.style.display = 'none';
+  container.innerHTML = orders.map(o => {
+    const items = typeof o.items === 'string' ? JSON.parse(o.items) : (o.items || []);
+    const statusMap = { pending: 'pending', confirmed: 'confirmed', shipped: 'shipped', completed: 'confirmed', cancelled: 'cancelled' };
+    const statusCls = statusMap[o.status] || 'pending';
+    const actions = buildOrderActions(o);
+    return `<div class="order-card">
+      <div class="order-card-head" onclick="toggleOrder(this)">
+        <div>
+          <div class="order-id">Order #${String(o.id).slice(0, 8).toUpperCase()}</div>
+          <div class="order-meta">${new Date(o.created_at).toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'})} &middot; ${Array.isArray(items) ? items.length : 0} item(s) &middot; ${o._delivery?.full_name || 'Customer'}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="order-amount">${window.ZM.code} ${Number(o.total || 0).toLocaleString()}</div>
+          <span class="badge-status badge-${statusCls}">${o.status}</span>
+        </div>
+      </div>
+      <div class="order-body">
+        ${Array.isArray(items) && items.length ? `<div style="margin-bottom:10px;">${items.map(it => `<div style="display:flex;justify-content:space-between;font-size:.83rem;padding:4px 0;border-bottom:1px solid var(--border)"><span>${it.name || 'Item'} x${it.qty || 1}</span><span style="color:var(--primary);">${window.ZM.code} ${Number((it.price || 0) * (it.qty || 1)).toLocaleString()}</span></div>`).join('')}</div>` : ''}
+        <div class="order-detail-row"><span style="color:var(--text2);">Phone</span><span>${o._delivery?.phone || '—'}</span></div>
+        <div class="order-detail-row"><span style="color:var(--text2);">Delivery Address</span><span>${o._delivery?.address || o._delivery?.street || '—'}</span></div>
+        <div class="order-detail-row"><span style="color:var(--text2);">City</span><span>${o._delivery?.city || '—'}</span></div>
+        <div class="order-detail-row"><span style="color:var(--text2);">Payment</span><span>${(o.payment_method||'N/A').replace(/_/g,' ')}</span></div>
+        ${o._delivery?.remark || o._delivery?.notes ? `<div class="order-detail-row"><span style="color:var(--text2);">Note</span><span>${o._delivery.remark||o._delivery.notes}</span></div>` : ''}
+        <div class="order-actions">${actions}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function buildOrderActions(o) {
+  let btns = '';
+  if (o.status === 'pending') {
+    btns += `<button class="oact-btn oact-confirm" onclick="updateOrderStatus('${o.id}','confirmed')">Confirm Order</button>`;
+    btns += `<button class="oact-btn oact-cancel" onclick="updateOrderStatus('${o.id}','cancelled')">Cancel</button>`;
+  }
+  if (o.status === 'confirmed') {
+    btns += `<button class="oact-btn oact-ship" onclick="updateOrderStatus('${o.id}','shipped')">Mark as Shipped</button>`;
+    btns += `<button class="oact-btn oact-cancel" onclick="updateOrderStatus('${o.id}','cancelled')">Cancel</button>`;
+  }
+  if (o.status === 'shipped') {
+    btns += `<button class="oact-btn oact-confirm" onclick="updateOrderStatus('${o.id}','completed')">Mark as Delivered</button>`;
+  }
+  if (o._delivery?.phone) {
+    const ph = (o._delivery.phone || '').replace(/\s+/g, '');
+    btns += `<a href="https://wa.me/${ph}?text=Hi%2C+regarding+your+order+%23${String(o.id).slice(0,8).toUpperCase()}" target="_blank" class="oact-btn" style="text-decoration:none;background:rgba(37,211,102,.12);border-color:#25d366;color:#25d366;">WhatsApp</a>`;
+  }
+  return btns;
+}
+
+function toggleOrder(head) {
+  const body = head.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+async function updateOrderStatus(id, status) {
+  try {
+    const res = await fetch(API + '/api/seller/orders/' + id + '/status', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({ status })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Order updated to ' + status);
+      const o = allOrders.find(x => x.id === id);
+      if (o) o.status = status;
+      const active = document.querySelector('.ofilter.active');
+      const filter = active?.textContent?.toLowerCase().trim();
+      filterOrders(filter === 'all orders' ? 'all' : filter || 'all', active || document.querySelector('.ofilter'));
+    } else showToast(data.error || 'Update failed', 'error');
+  } catch (e) { showToast('Connection error', 'error'); }
+}
+
+// ==================== ANALYTICS ====================
+function loadAnalytics() {
+  if (!sellerData) return;
+  const orders = sellerData.orders || allOrders || [];
+  const products = sellerData.products || [];
+
+  // Revenue chart (last 6 months)
+  const now = new Date();
+  const months = Array.from({ length: 6 }, (_, i) => {
+    const d = new Date(now.getFullYear(), now.getMonth() - 5 + i, 1);
+    return { label: d.toLocaleString('default', { month: 'short' }), key: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`, total: 0 };
+  });
+
+  orders.filter(o => o.status !== 'cancelled').forEach(o => {
+    const key = (o.created_at || '').slice(0, 7);
+    const m = months.find(x => x.key === key);
+    if (m) m.total += Number(o.total || 0);
+  });
+
+  const maxRev = Math.max(...months.map(m => m.total), 1);
+  document.getElementById('revenueChart').innerHTML = months.map(m => {
+    const h = Math.max(4, Math.round((m.total / maxRev) * 96));
+    return `<div class="bar-col">
+      <div style="font-size:.68rem;color:var(--primary);font-weight:600;">${m.total > 0 ? (m.total/1000).toFixed(0)+'K' : ''}</div>
+      <div class="bar-fill" style="height:${h}px;"></div>
+      <div class="bar-label">${m.label}</div>
+    </div>`;
+  }).join('');
+
+  // Top products by sales
+  const sorted = [...products].sort((a, b) => (b.sales_count || 0) - (a.sales_count || 0)).slice(0, 5);
+  document.getElementById('topProductsList').innerHTML = sorted.length
+    ? sorted.map((p, i) => `<div class="top-product-row">
+        <div class="top-prod-rank">${i + 1}</div>
+        <div class="top-prod-name" title="${p.name}">${p.name}</div>
+        <div class="top-prod-sales">${p.sales_count || 0} sales</div>
+      </div>`).join('')
+    : '<div style="font-size:.85rem;color:var(--text2);padding:12px 0;">No sales data yet</div>';
+
+  // Order summary donut-like
+  const summary = { pending: 0, confirmed: 0, shipped: 0, delivered: 0, cancelled: 0 };
+  orders.forEach(o => { if (summary[o.status] !== undefined) summary[o.status]++; });
+  const total = orders.length || 1;
+  document.getElementById('orderSummaryChart').innerHTML = Object.entries(summary).map(([k, v]) => {
+    const pct = Math.round((v / total) * 100);
+    const colors = { pending: 'var(--warning)', confirmed: 'var(--success)', shipped: '#1890ff', delivered: 'var(--primary)', cancelled: 'var(--error)' };
+    return v > 0 ? `<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:${colors[k]};flex-shrink:0;"></div>
+        <span style="font-size:.82rem;text-transform:capitalize;">${k}</span>
+      </div>
+      <span style="font-size:.82rem;font-weight:700;color:${colors[k]};">${v} (${pct}%)</span>
+    </div>` : '';
+  }).join('') || '<div style="font-size:.85rem;color:var(--text2);">No orders yet</div>';
+
+  // Performance stats
+  const totalRev = orders.filter(o => o.status !== 'cancelled').reduce((s, o) => s + Number(o.total || 0), 0);
+  const avgOrder = orders.length ? (totalRev / orders.length) : 0;
+  const totalViews = products.reduce((s, p) => s + (p.views_count || 0), 0);
+  const convRate = totalViews ? ((orders.length / totalViews) * 100).toFixed(1) : '0.0';
+  document.getElementById('perfStats').innerHTML = [
+    { label: 'Total Revenue', val: window.ZM.code + ' ' + Math.round(totalRev).toLocaleString() },
+    { label: 'Avg Order Value', val: window.ZM.code + ' ' + Math.round(avgOrder).toLocaleString() },
+    { label: 'Total Views', val: totalViews.toLocaleString() },
+    { label: 'Conversion Rate', val: convRate + '%' },
+    { label: 'Active Products', val: products.filter(p => p.status === 'active').length },
+    { label: 'Completed Orders', val: orders.filter(o => o.status === 'completed').length },
+  ].map(s => `<div style="background:var(--surface2);border-radius:10px;padding:14px;text-align:center;">
+    <div style="font-size:1.1rem;font-weight:800;color:var(--primary);">${s.val}</div>
+    <div style="font-size:.74rem;color:var(--text2);margin-top:3px;">${s.label}</div>
+  </div>`).join('');
+}
+
+// ==================== PROFILE ====================
+async function saveProfile() {
+  const btn = document.getElementById('saveProfileBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Saving...';
+  try {
+    const res = await fetch(API + '/api/auth/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({
+        full_name: document.getElementById('editName').value.trim(),
+        phone: document.getElementById('editPhone').value,
+        whatsapp: document.getElementById('editWhatsApp').value,
+        description: document.getElementById('editDesc').value,
+        address: document.getElementById('editAddress').value,
+        country: document.getElementById('editCountry').value,
+        business_name: document.getElementById('editBusiness').value,
+        business_type: document.getElementById('editBizType').value
+      })
+    });
+    const data = await res.json();
+    if (data.success) showToast('Profile saved!');
+    else showToast(data.error, 'error');
+  } catch (e) { showToast('Error saving profile', 'error'); }
+  btn.disabled = false; btn.textContent = 'Save Changes';
+}
+
+async function changePassword() {
+  const curr = document.getElementById('pwCurrent').value;
+  const nw = document.getElementById('pwNew').value;
+  const conf = document.getElementById('pwConfirm').value;
+  if (!curr || !nw) { showToast('Enter current and new password', 'error'); return; }
+  if (nw.length < 8) { showToast('New password must be at least 8 characters', 'error'); return; }
+  if (nw !== conf) { showToast('New passwords do not match', 'error'); return; }
+  const btn = document.getElementById('changePwBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    const res = await fetch(API + '/api/auth/change-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({ current_password: curr, new_password: nw })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Password changed successfully!');
+      document.getElementById('pwCurrent').value = '';
+      document.getElementById('pwNew').value = '';
+      document.getElementById('pwConfirm').value = '';
+    } else showToast(data.error || 'Could not change password', 'error');
+  } catch (e) { showToast('Connection error', 'error'); }
+  btn.disabled = false; btn.textContent = 'Change Password';
+}
+
+function confirmDeactivate() {
+  zmConfirm('All your products will be hidden from buyers. You can reactivate by contacting support.', 'Deactivate Store', () => {
+    showToast('Please contact support@zmafrdeal.com to deactivate your store.', 'warning');
+  }, null, 'Deactivate', true);
+}
+
+function confirmDeleteAccount() {
+  zmConfirm('This will permanently delete your account and all your products. This CANNOT be undone.', 'Delete Account', () => {
+    zmConfirm('Last confirmation — are you absolutely sure? All data will be lost forever.', 'Final Confirmation', () => {
+      showToast('Please contact support@zmafrdeal.com to request account deletion.', 'warning');
+    }, null, 'Yes, Delete Everything', true);
+  }, null, 'Continue', true);
+}
+
+// ==================== IMAGE UPLOAD (Supabase Storage) ====================
+const SUPABASE_URL = 'https://wjfxiikrihnqniuwdzrg.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_13OC9jQw5WjW-XE-rmEwvQ_pbcJYmJr';
+const STORAGE_BUCKET = 'product-images';
+
+async function sUploadFile(file, folder) {
+  const ext = file.name.split('.').pop();
+  const filename = `${folder}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${STORAGE_BUCKET}/${filename}`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'apikey': SUPABASE_ANON_KEY, 'Content-Type': file.type },
+      body: file
+    });
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      const msg = errBody?.message || errBody?.error || 'Upload failed';
+      throw new Error(msg);
+    }
+    return `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${filename}`;
+  } catch (e) {
+    showToast('Image upload failed: ' + e.message + '. Please paste a URL instead.', 'error');
+    return null;
+  }
+}
+
+async function sUploadHomeFixed(input) {
+  const file = input.files[0]; if (!file) return;
+  const status = document.getElementById('sHomeStatus');
+  status.innerHTML = '<span style="color:var(--warning);">Uploading...</span>';
+  const url = await sUploadFile(file, 'home');
+  if (!url) { status.innerHTML = '<span style="color:var(--error);">Upload failed — paste a URL instead</span>'; return; }
+  document.getElementById('pHomePhoto').value = url;
+  sPreviewHome(url);
+  status.innerHTML = '<span style="color:var(--success);">Uploaded!</span>';
+}
+
+function sPreviewHome(url) {
+  const prev = document.getElementById('sHomePreview');
+  if (url) prev.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">`;
+}
+
+async function sUploadHome(input) {
+  const file = input.files[0]; if (!file) return;
+  const status = document.getElementById('sHomeStatus');
+  status.innerHTML = '<span style="color:var(--warning);">Uploading...</span>';
+  const url = await sUploadFile(file, 'home');
+  if (!url) { status.innerHTML = '<span style="color:var(--error);">Upload failed — paste a URL instead</span>'; return; }
+  document.getElementById('pHomePhoto').value = url;
+  sPreviewHome(url);
+  status.innerHTML = '<span style="color:var(--success);">Uploaded!</span>';
+}
+
+async function sUploadGallery(files) {
+  const status = document.getElementById('sGalleryStatus');
+  const grid = document.getElementById('sGalleryGrid');
+  status.textContent = `Uploading ${files.length} photo(s)...`;
+  const urls = [];
+  for (const file of files) {
+    const url = await sUploadFile(file, 'gallery');
+    if (!url) continue;
+    urls.push(url);
+    const img = document.createElement('img');
+    img.src = url; img.style.cssText = 'width:70px;height:70px;object-fit:cover;border-radius:8px;border:1px solid var(--border);';
+    grid.appendChild(img);
+  }
+  if (!urls.length) { status.innerHTML = '<span style="color:var(--error);">Upload failed — paste URLs instead</span>'; return; }
+  const existing = document.getElementById('pScrollPhotos').value;
+  const all = (existing ? existing.split(',').map(s => s.trim()).filter(Boolean) : []).concat(urls);
+  document.getElementById('pScrollPhotos').value = all.join(', ');
+  status.innerHTML = `<span style="color:var(--success);">${urls.length} photo(s) ready!</span>`;
+}
+
+async function sUploadMore(files) {
+  const grid = document.getElementById('sMoreGrid');
+  const urls = [];
+  for (const file of files) {
+    const url = await sUploadFile(file, 'more');
+    if (!url) continue;
+    urls.push(url);
+    const img = document.createElement('img');
+    img.src = url; img.style.cssText = 'width:70px;height:70px;object-fit:cover;border-radius:8px;border:1px solid var(--border);';
+    grid.appendChild(img);
+  }
+  if (!urls.length) return;
+  const existing = document.getElementById('pMorePhotos').value;
+  const all = (existing ? existing.split(',').map(s => s.trim()).filter(Boolean) : []).concat(urls);
+  document.getElementById('pMorePhotos').value = all.join(', ');
+}
+
+function sDrop(e) {
+  e.preventDefault();
+  document.getElementById('sGalleryZone').style.borderColor = 'var(--border)';
+  const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+  if (files.length) sUploadGallery(files);
+}
+
+// ==================== LOGOUT ====================
+function doLogout() {
+  localStorage.removeItem('zm_token');
+  localStorage.removeItem('zm_user');
+  window.location.reload();
+}
+
+// ==================== SESSION CHECK ====================
+async function checkAuth() {
+  if (!token) return;
+  try {
+    const res = await fetch(API + '/api/sellers/dashboard', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    if (data.success) { sellerData = data.data; showDashboard(data.data); }
+    else { localStorage.removeItem('zm_token'); token = null; }
+  } catch (e) {}
+}
+
+checkAuth();
+
+// ─── Custom Confirm Dialog ─────────────────────────────────────────────────
+let _zmCB = null;
+function zmConfirm(msg, title, onOK, onCancel, okLabel, danger) {
+  _zmCB = { ok: onOK || (() => {}), cancel: onCancel || (() => {}) };
+  document.getElementById('zmConfirmTitle').textContent = title || 'Confirm';
+  document.getElementById('zmConfirmMsg').textContent = msg;
+  document.getElementById('zmConfirmOkBtn').textContent = okLabel || 'Confirm';
+  document.getElementById('zmConfirmOkBtn').style.background = danger ? '#ef4444' : '#c8a96e';
+  const o = document.getElementById('zmConfirmOverlay');
+  o.style.opacity = '1'; o.style.pointerEvents = 'auto';
+  document.getElementById('zmConfirmBox').style.transform = 'scale(1) translateY(0)';
+}
+function zmConfirmResolve(confirmed) {
+  const o = document.getElementById('zmConfirmOverlay');
+  o.style.opacity = '0'; o.style.pointerEvents = 'none';
+  document.getElementById('zmConfirmBox').style.transform = 'scale(.94) translateY(14px)';
+  const cb = _zmCB; _zmCB = null;
+  setTimeout(() => { if (cb) { if (confirmed) cb.ok(); else cb.cancel(); } }, 60);
+}
+</script>
+
+<!-- Custom Confirm Dialog -->
+<div id="zmConfirmOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9990;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s ease;">
+  <div id="zmConfirmBox" style="background:#1e1e2e;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:340px;transform:scale(.94) translateY(14px);transition:transform .22s cubic-bezier(.34,1.56,.64,1);box-shadow:0 24px 60px rgba(0,0,0,.5);position:relative;border:1px solid rgba(255,255,255,.08);">
+    <button onclick="zmConfirmResolve(false)" aria-label="Close" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,.08);border:none;cursor:pointer;color:#aaa;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:1.3rem;line-height:1;">×</button>
+    <div id="zmConfirmTitle" style="font-size:1.05rem;font-weight:700;margin-bottom:8px;padding-right:30px;color:#fff;"></div>
+    <div id="zmConfirmMsg" style="font-size:.88rem;color:#aaa;line-height:1.55;margin-bottom:22px;"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button onclick="zmConfirmResolve(false)" style="padding:10px 20px;border:1px solid rgba(255,255,255,.15);background:transparent;border-radius:10px;font-size:.88rem;cursor:pointer;color:#ccc;font-weight:500;">Cancel</button>
+      <button id="zmConfirmOkBtn" onclick="zmConfirmResolve(true)" style="padding:10px 22px;background:#c8a96e;border:none;border-radius:10px;font-size:.88rem;font-weight:600;cursor:pointer;color:#fff;min-width:90px;">Confirm</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
