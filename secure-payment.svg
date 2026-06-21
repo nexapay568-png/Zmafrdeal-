@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <defs>
+    <linearGradient id="bgp" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0f1a"/>
+      <stop offset="100%" style="stop-color:#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="card1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f68b1e"/>
+      <stop offset="100%" style="stop-color:#e07010"/>
+    </linearGradient>
+    <linearGradient id="card2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#252540"/>
+      <stop offset="100%" style="stop-color:#1a1a2e"/>
+    </linearGradient>
+  </defs>
+  <rect width="360" height="260" fill="url(#bgp)" rx="16"/>
+  <!-- Background card (shadow) -->
+  <rect x="62" y="72" width="200" height="125" rx="14" fill="#0a0a14" opacity="0.5"/>
+  <!-- Main payment card -->
+  <rect x="56" y="64" width="200" height="125" rx="14" fill="url(#card1)"/>
+  <!-- Card chip -->
+  <rect x="78" y="84" width="28" height="22" rx="4" fill="#d4a017" opacity="0.9"/>
+  <line x1="78" y1="95" x2="106" y2="95" stroke="#b8860b" stroke-width="1"/>
+  <line x1="92" y1="84" x2="92" y2="106" stroke="#b8860b" stroke-width="1"/>
+  <!-- Card number -->
+  <text x="80" y="130" font-family="monospace" font-size="11" fill="white" opacity="0.9" letter-spacing="2">•••• •••• 4271</text>
+  <!-- Card name -->
+  <text x="80" y="152" font-family="Arial" font-size="9" fill="white" opacity="0.75">ZMAFRDEAL SELLER</text>
+  <!-- Contactless symbol -->
+  <path d="M216 84 Q228 95 216 106" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+  <path d="M222 80 Q238 95 222 110" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+  <path d="M228 76 Q248 95 228 114" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  <!-- Mobile money phone -->
+  <rect x="224" y="90" width="70" height="110" rx="10" fill="url(#card2)" stroke="#f68b1e" stroke-width="1.5"/>
+  <rect x="230" y="102" width="58" height="80" rx="4" fill="#0f0f1a"/>
+  <!-- Mobile screen content -->
+  <rect x="234" y="106" width="50" height="14" rx="3" fill="#f68b1e"/>
+  <text x="259" y="117" text-anchor="middle" font-family="Arial" font-size="7" fill="white">Mobile Money</text>
+  <text x="259" y="135" text-anchor="middle" font-family="Arial" font-size="8" font-weight="bold" fill="#52c41a">Le 450,000</text>
+  <text x="259" y="147" text-anchor="middle" font-family="Arial" font-size="7" fill="#a0a0b0">Received ✓</text>
+  <rect x="238" y="156" width="42" height="16" rx="5" fill="#f68b1e"/>
+  <text x="259" y="167" text-anchor="middle" font-family="Arial" font-size="7" font-weight="bold" fill="white">Withdraw</text>
+  <!-- Home button -->
+  <circle cx="259" cy="192" r="5" fill="#252540" stroke="#f68b1e" stroke-width="1"/>
+  <!-- Shield icon for security -->
+  <path d="M148 25 L168 32 L168 48 Q168 58 148 65 Q128 58 128 48 L128 32 Z" fill="#52c41a" opacity="0.85"/>
+  <polyline points="138,45 145,52 160,38" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Security text -->
+  <text x="181" y="42" font-family="Arial" font-size="9" fill="#52c41a">100% Secure</text>
+  <text x="181" y="54" font-family="Arial" font-size="8" fill="#a0a0b0">Payments Protected</text>
+  <!-- Bottom label -->
+  <text x="180" y="228" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#f68b1e">Mobile Money &amp; Card Payments</text>
+</svg>

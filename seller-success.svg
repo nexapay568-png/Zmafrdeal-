@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" width="480" height="320">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#252540"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f68b1e"/>
+      <stop offset="100%" style="stop-color:#e07010"/>
+    </linearGradient>
+    <linearGradient id="skin" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5E3C"/>
+      <stop offset="100%" style="stop-color:#6B3F20"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="320" fill="url(#bg)" rx="16"/>
+  <!-- Stars -->
+  <circle cx="40" cy="40" r="2" fill="#f68b1e" opacity="0.6"/>
+  <circle cx="80" cy="20" r="1.5" fill="#f68b1e" opacity="0.4"/>
+  <circle cx="440" cy="50" r="2" fill="#f68b1e" opacity="0.5"/>
+  <circle cx="400" cy="80" r="1" fill="#f68b1e" opacity="0.3"/>
+  <circle cx="60" cy="280" r="1.5" fill="#f68b1e" opacity="0.4"/>
+  <circle cx="420" cy="260" r="2" fill="#f68b1e" opacity="0.5"/>
+  <!-- Phone device -->
+  <rect x="180" y="60" width="120" height="200" rx="18" fill="#0f0f1a" stroke="#f68b1e" stroke-width="2.5"/>
+  <rect x="186" y="80" width="108" height="155" rx="4" fill="#1a1a2e"/>
+  <!-- Phone screen - store interface -->
+  <rect x="190" y="84" width="100" height="24" rx="3" fill="url(#gold)"/>
+  <text x="240" y="100" text-anchor="middle" font-family="Arial" font-size="9" font-weight="bold" fill="white">ZMAFRDEAL</text>
+  <!-- Product cards on screen -->
+  <rect x="190" y="114" width="45" height="50" rx="4" fill="#252540"/>
+  <rect x="245" y="114" width="45" height="50" rx="4" fill="#252540"/>
+  <rect x="190" y="170" width="45" height="50" rx="4" fill="#252540"/>
+  <rect x="245" y="170" width="45" height="50" rx="4" fill="#252540"/>
+  <rect x="192" y="116" width="41" height="28" rx="3" fill="#2e2e50"/>
+  <rect x="247" y="116" width="41" height="28" rx="3" fill="#2e2e50"/>
+  <rect x="192" y="172" width="41" height="28" rx="3" fill="#2e2e50"/>
+  <rect x="247" y="172" width="41" height="28" rx="3" fill="#2e2e50"/>
+  <!-- Price tags -->
+  <rect x="192" y="148" width="30" height="8" rx="2" fill="#f68b1e" opacity="0.8"/>
+  <rect x="247" y="148" width="30" height="8" rx="2" fill="#f68b1e" opacity="0.8"/>
+  <rect x="192" y="204" width="30" height="8" rx="2" fill="#f68b1e" opacity="0.8"/>
+  <rect x="247" y="204" width="30" height="8" rx="2" fill="#f68b1e" opacity="0.8"/>
+  <!-- Home button -->
+  <circle cx="240" cy="248" r="8" fill="#252540" stroke="#f68b1e" stroke-width="1.5"/>
+  <!-- Seller person on right -->
+  <circle cx="370" cy="130" r="28" fill="url(#skin)"/>
+  <ellipse cx="370" cy="200" rx="40" ry="50" fill="url(#skin)"/>
+  <!-- Shirt -->
+  <ellipse cx="370" cy="210" rx="38" ry="48" fill="#f68b1e" opacity="0.9"/>
+  <!-- Happy expression -->
+  <path d="M358 128 Q370 140 382 128" stroke="#0f0f1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <circle cx="362" cy="122" r="2.5" fill="#0f0f1a"/>
+  <circle cx="378" cy="122" r="2.5" fill="#0f0f1a"/>
+  <!-- Money bag in hand -->
+  <circle cx="335" cy="185" r="18" fill="url(#gold)"/>
+  <text x="335" y="190" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="white">$</text>
+  <!-- Speech bubble -->
+  <ellipse cx="420" cy="90" rx="42" ry="25" fill="white" opacity="0.95"/>
+  <polygon points="405,112 410,102 420,115" fill="white" opacity="0.95"/>
+  <text x="420" y="85" text-anchor="middle" font-family="Arial" font-size="8" font-weight="bold" fill="#f68b1e">Sales Today</text>
+  <text x="420" y="98" text-anchor="middle" font-family="Arial" font-size="11" font-weight="900" fill="#0f0f1a">+340%</text>
+  <!-- Left seller -->
+  <circle cx="100" cy="140" r="22" fill="#5C3A1E"/>
+  <ellipse cx="100" cy="205" rx="30" ry="40" fill="#5C3A1E"/>
+  <ellipse cx="100" cy="212" rx="28" ry="38" fill="#e07010" opacity="0.85"/>
+  <path d="M90 138 Q100 148 110 138" stroke="#0f0f1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="94" cy="133" r="2" fill="#0f0f1a"/>
+  <circle cx="106" cy="133" r="2" fill="#0f0f1a"/>
+  <!-- Package in hand -->
+  <rect x="68" y="185" width="24" height="20" rx="3" fill="#f68b1e"/>
+  <line x1="68" y1="195" x2="92" y2="195" stroke="#e07010" stroke-width="1.5"/>
+  <line x1="80" y1="185" x2="80" y2="205" stroke="#e07010" stroke-width="1.5"/>
+  <!-- Stars of success -->
+  <text x="130" y="90" font-family="Arial" font-size="18" fill="#f68b1e">★</text>
+  <text x="310" y="55" font-family="Arial" font-size="14" fill="#f68b1e" opacity="0.7">★</text>
+  <text x="150" y="50" font-family="Arial" font-size="12" fill="#f68b1e" opacity="0.5">★</text>
+  <!-- Bottom label -->
+  <rect x="140" y="280" width="200" height="26" rx="13" fill="url(#gold)" opacity="0.9"/>
+  <text x="240" y="297" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="white">Sellers Thriving on Zmafrdeal</text>
+</svg>
