@@ -433,6 +433,49 @@ select option{background:var(--surface2);}
   .cta-btn{min-width:160px;padding:14px 24px;}
 }
 </style>
+
+<script>
+/* ── Zmafrdeal Global Settings ── */
+(function(){
+  var ZMS={};
+  try{ZMS=JSON.parse(localStorage.getItem('zm_store_settings')||'{}');}catch(e){}
+  /* Maintenance mode → redirect (all pages except admin) */
+  if(ZMS.maintenanceMode){window.location.replace('maintain.html');return;}
+  /* Keep zm_settings (window.ZM) in sync with stored currency */
+  if(ZMS.currencyCode){
+    try{localStorage.setItem('zm_settings',JSON.stringify({code:ZMS.currencyCode,symbol:ZMS.currencySymbol||'Le',name:ZMS.currencyName||ZMS.currencyCode,country:ZMS.country||'Sierra Leone',ts:Date.now()}));}catch(e){}
+  }
+  /* Apply settings once DOM is ready */
+  function applyZM(){
+    var name=ZMS.storeName||'Zmafrdeal';
+    var wa=ZMS.whatsappNumber||'+23277000000';
+    /* Page title */
+    document.title=document.title.replace(/Zmafrdeal/gi,name);
+    /* Nav brand */
+    document.querySelectorAll('.nav-name').forEach(function(el){el.textContent=el.textContent.replace(/Zmafrdeal/gi,name);});
+    /* Footer */
+    var fc=document.getElementById('zmFooterCopy');
+    if(fc)fc.textContent='© '+new Date().getFullYear()+' '+name+'. All rights reserved. | '+(ZMS.country||'Sierra Leone');
+    var hc=document.getElementById('zmSellerHeroCountry');if(hc)hc.textContent=ZMS.country||'Sierra Leone';
+    /* WA dynamic */
+    if(typeof window.ADMIN_WHATSAPP!=='undefined')window.ADMIN_WHATSAPP=wa;
+    /* Display toggles */
+    if(ZMS.showBanners===false){var b=document.getElementById('bannersSection');if(b)b.style.display='none';}
+    if(ZMS.showFlashSale===false){var f=document.getElementById('flashSection');if(f)f.style.display='none';}
+    if(ZMS.showRecentlyViewed===false){var r=document.getElementById('recentlyViewedSection');if(r)r.style.display='none';}
+    /* Registration disabled (auth page) */
+    if(ZMS.registrationDisabled){
+      var notice=document.getElementById('zmRegDisabledNotice');if(notice)notice.style.display='block';
+      var waEl=document.getElementById('zmRegWaNum');if(waEl)waEl.textContent=wa;
+    }
+    /* Sellers: commission */
+    if(ZMS.commissionRate){
+      document.querySelectorAll('.zm-commission').forEach(function(el){el.textContent=(100-ZMS.commissionRate)+'%';});
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',applyZM);}else{applyZM();}
+})();
+</script>
 </head>
 <body>
 
@@ -487,7 +530,7 @@ select option{background:var(--surface2);}
       <h1>Sell Across <em>Africa</em><br/>Reach Millions of Buyers</h1>
 
       <p class="hero-sub">
-        Join thousands of thriving sellers on Zmafrdeal — Sierra Leone's fastest-growing marketplace.
+        Join thousands of thriving sellers on Zmafrdeal — <span id="zmSellerHeroCountry">Sierra Leone</span>'s fastest-growing marketplace.
         We make it simple, supportive, and rewarding to grow your business.
       </p>
 
@@ -1875,6 +1918,7 @@ select option{background:var(--surface2);}
 
 <script>
 const API = 'https://products-store-3g52.onrender.com';
+document.addEventListener('DOMContentLoaded',function(){var z={};try{z=JSON.parse(localStorage.getItem('zm_store_settings')||'{}');}catch(e){}var name=z.storeName||'Zmafrdeal';document.title=document.title.replace(/Zmafrdeal/gi,name);document.querySelectorAll('.nav-name').forEach(function(el){el.textContent=el.textContent.replace(/Zmafrdeal/gi,name);});var keep=100-(z.commissionRate||10);document.querySelectorAll('.zm-commission').forEach(function(el){el.textContent=keep+'%';});if(z.registrationDisabled){document.querySelectorAll('[onclick*="showAuth(\'register\')"]').forEach(function(b){b.disabled=true;b.textContent='Registration Closed';b.style.opacity='.55';b.style.cursor='not-allowed';});}});
 
 window.ZM = (function() {
   try { const s = JSON.parse(localStorage.getItem('zm_settings') || '{}'); if (s.code) return s; } catch(e) {}
