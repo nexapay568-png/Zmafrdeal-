@@ -1,0 +1,3021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Zmafrdeal — Seller Portal</title>
+<link rel="icon" href="zmafrdeal.png" type="image/png"/>
+<link rel="apple-touch-icon" href="zmafrdeal.png"/>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#f68b1e"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --primary:#f68b1e;--primary-dark:#e07010;--bg:#0f0f1a;--surface:#1a1a2e;
+  --surface2:#252540;--surface3:#2e2e50;--text:#f0f0f0;--text2:#a0a0b0;
+  --error:#ff4d4f;--success:#52c41a;--warning:#faad14;--border:rgba(246,139,30,0.15);
+  --radius:14px;--shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;}
+
+/* NAV */
+.nav{background:var(--primary);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1000;box-shadow:0 2px 10px rgba(246,139,30,0.25);}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer;}
+.nav-logo{width:38px;height:38px;}
+.nav-name{font-size:1.1rem;font-weight:800;letter-spacing:2px;color:#fff;}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-btn{padding:9px 18px;border-radius:8px;font-size:.85rem;cursor:pointer;border:none;font-weight:600;transition:all .2s;}
+.btn-primary{background:#fff;color:var(--primary);font-weight:700;}
+.btn-ghost{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.4);color:#fff;}
+
+/* HERO */
+.hero{
+  position:relative;overflow:hidden;
+  min-height:580px;display:flex;align-items:center;justify-content:center;
+  padding:70px 20px 60px;text-align:center;
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+  background:linear-gradient(160deg,#c55e00 0%,#d97210 30%,#f68b1e 60%,#ff9f3a 100%);
+}
+.hero-bg-img{
+  position:absolute;inset:0;z-index:1;
+  background-image:url('hero-bg.svg');
+  background-size:cover;background-position:center;
+  opacity:0.22;
+}
+.hero-bg-overlay{
+  position:absolute;inset:0;z-index:2;
+  background:linear-gradient(180deg,rgba(0,0,0,0.18) 0%,rgba(0,0,0,0.05) 40%,rgba(0,0,0,0.25) 100%);
+}
+/* Decorative blobs — pointer-events:none so they never block clicks */
+.hero::before{
+  content:'';position:absolute;top:-80px;left:-80px;
+  width:380px;height:380px;
+  background:radial-gradient(circle,rgba(255,255,255,0.14),transparent 68%);
+  border-radius:50%;z-index:3;pointer-events:none;
+}
+.hero::after{
+  content:'';position:absolute;bottom:-80px;right:-80px;
+  width:280px;height:280px;
+  background:radial-gradient(circle,rgba(255,255,255,0.09),transparent 68%);
+  border-radius:50%;z-index:3;pointer-events:none;
+}
+.hero-content{position:relative;z-index:10;width:100%;max-width:600px;margin:0 auto;}
+.hero-logo-svg{margin:0 auto 22px;display:block;}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.45);
+  border-radius:22px;padding:7px 16px;font-size:.8rem;color:#fff;margin-bottom:22px;
+  backdrop-filter:blur(4px);
+}
+.hero h1{font-size:clamp(2rem,5.5vw,3.2rem);font-weight:900;margin-bottom:16px;line-height:1.18;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,0.18);}
+.hero h1 em{font-style:normal;color:#fff8e8;}
+.hero-sub{font-size:1.05rem;color:rgba(255,255,255,0.92);max-width:480px;margin:0 auto 28px;line-height:1.6;}
+.hero-commission-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.18);border:1.5px solid rgba(255,255,255,0.5);
+  border-radius:30px;padding:10px 20px;margin-bottom:28px;
+  backdrop-filter:blur(6px);font-size:.88rem;color:#fff;
+}
+.hero-commission-pill strong{font-size:1.15rem;font-weight:900;}
+.hero-stats{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:34px;}
+.hero-stat{text-align:center;}
+.hero-stat-n{font-size:1.6rem;font-weight:900;color:#fff;line-height:1;}
+.hero-stat-l{font-size:.72rem;color:rgba(255,255,255,0.78);margin-top:3px;}
+.cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.cta-btn{
+  position:relative;z-index:10;
+  padding:16px 34px;border-radius:12px;font-size:1rem;font-weight:800;
+  cursor:pointer;border:none;transition:all .25s;
+  display:inline-flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+  min-width:180px;touch-action:manipulation;
+}
+.cta-primary{background:#fff;color:var(--primary);}
+.cta-primary:hover,.cta-primary:focus{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,0.25);}
+.cta-primary:active{transform:translateY(0);box-shadow:none;}
+.cta-outline{background:rgba(255,255,255,0.12);border:2px solid rgba(255,255,255,0.7);color:#fff;backdrop-filter:blur(4px);}
+.cta-outline:hover,.cta-outline:focus{border-color:#fff;background:rgba(255,255,255,0.22);}
+.cta-outline:active{background:rgba(255,255,255,0.08);}
+
+/* TRUST BADGES */
+.trust-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 20px;}
+.trust-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;}
+.trust-badge{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--text2);}
+.trust-badge svg{width:18px;height:18px;flex-shrink:0;}
+.trust-badge span{font-weight:600;color:var(--text);}
+
+/* IMAGE HIGHLIGHT SECTION */
+.highlight-section{padding:56px 20px;max-width:960px;margin:0 auto;}
+.highlight-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;}
+.highlight-grid.reverse{direction:rtl;}
+.highlight-grid.reverse>*{direction:ltr;}
+.highlight-img-wrap{border-radius:20px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.4);border:1px solid var(--border);}
+.highlight-img-wrap img,.highlight-img-wrap svg{width:100%;height:auto;display:block;}
+.highlight-text h2{font-size:1.5rem;font-weight:800;margin-bottom:12px;line-height:1.3;}
+.highlight-text h2 span{color:var(--primary);}
+.highlight-text p{color:var(--text2);line-height:1.7;font-size:.92rem;margin-bottom:18px;}
+.highlight-bullets{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.highlight-bullets li{display:flex;align-items:flex-start;gap:10px;font-size:.88rem;color:var(--text2);}
+.highlight-bullets li svg{width:18px;height:18px;flex-shrink:0;margin-top:1px;stroke:var(--primary);}
+@media(max-width:700px){.highlight-grid,.highlight-grid.reverse{grid-template-columns:1fr;direction:ltr;}}
+
+/* FEATURES */
+.section{padding:48px 20px;max-width:900px;margin:0 auto;}
+.section-title{font-size:1.4rem;font-weight:800;margin-bottom:8px;}
+.section-sub{color:var(--text2);font-size:.9rem;margin-bottom:32px;}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+.feature-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px 18px;transition:border-color .25s,transform .25s;}
+.feature-card:hover{border-color:rgba(246,139,30,.4);transform:translateY(-3px);}
+.feature-icon{width:44px;height:44px;background:rgba(246,139,30,0.10);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.feature-icon svg{width:22px;height:22px;stroke:var(--primary);}
+.feature-title{font-size:.95rem;font-weight:700;margin-bottom:6px;}
+.feature-desc{font-size:.82rem;color:var(--text2);line-height:1.5;}
+
+/* TESTIMONIALS */
+.testimonials-section{padding:56px 0;overflow:hidden;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.testimonials-heading{text-align:center;margin-bottom:36px;padding:0 20px;}
+.testimonials-track-wrap{
+  overflow-x:auto;overflow-y:hidden;
+  cursor:grab;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.testimonials-track-wrap::-webkit-scrollbar{display:none;}
+.testimonials-track-wrap:active{cursor:grabbing;}
+.testimonials-track{
+  display:flex;gap:20px;
+  width:max-content;
+  padding:8px 32px 16px;
+  animation:scrollLeft 35s linear infinite;
+}
+.testimonials-track:hover{animation-play-state:paused;}
+@keyframes scrollLeft{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
+.tcard{
+  width:280px;flex-shrink:0;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:16px;padding:22px 20px;
+  transition:border-color .2s;
+}
+.tcard:hover{border-color:rgba(246,139,30,.45);}
+.tcard-stars{color:#f68b1e;font-size:1rem;letter-spacing:2px;margin-bottom:12px;}
+.tcard-quote{font-size:.87rem;color:var(--text);line-height:1.6;margin-bottom:16px;font-style:italic;}
+.tcard-author{display:flex;align-items:center;gap:10px;}
+.tcard-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#fff;flex-shrink:0;}
+.tcard-name{font-size:.85rem;font-weight:700;}
+.tcard-meta{font-size:.74rem;color:var(--text2);}
+
+/* FAQ */
+.faq-section{padding:56px 20px;max-width:740px;margin:0 auto;}
+.faq-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;transition:border-color .25s;}
+.faq-item.open{border-color:rgba(246,139,30,.4);}
+.faq-q{
+  width:100%;background:transparent;border:none;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 20px;cursor:pointer;text-align:left;
+  font-size:.95rem;font-weight:600;color:var(--text);
+  gap:12px;
+}
+.faq-q:hover{color:var(--primary);}
+.faq-icon{
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(246,139,30,.12);border:1.5px solid rgba(246,139,30,.3);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .25s;font-size:1rem;font-weight:700;color:var(--primary);
+  line-height:1;
+}
+.faq-item.open .faq-icon{background:var(--primary);color:#fff;border-color:var(--primary);}
+.faq-a{
+  max-height:0;overflow:hidden;
+  transition:max-height .4s cubic-bezier(.4,0,.2,1),padding .3s ease;
+  padding:0 20px;
+}
+.faq-a-inner{padding-bottom:18px;font-size:.88rem;color:var(--text2);line-height:1.7;border-top:1px solid var(--border);padding-top:14px;}
+.faq-item.open .faq-a{max-height:400px;}
+
+/* POLICIES SECTION */
+.policies-bar{background:var(--surface);border-top:1px solid var(--border);padding:28px 20px;}
+.policies-inner{max-width:900px;margin:0 auto;text-align:center;}
+.policies-inner p{font-size:.85rem;color:var(--text2);margin-bottom:14px;}
+.policy-links{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.policy-link-btn{
+  padding:9px 18px;border-radius:22px;border:1.5px solid var(--border);
+  background:transparent;color:var(--text2);font-size:.82rem;cursor:pointer;
+  transition:all .2s;font-weight:500;
+}
+.policy-link-btn:hover{border-color:var(--primary);color:var(--primary);}
+
+/* POLICY OVERLAY PAGES */
+.policy-overlay{
+  position:fixed;inset:0;z-index:800;
+  display:flex;align-items:flex-start;justify-content:center;
+  overflow:hidden;
+  background:rgba(0,0,0,0);
+  pointer-events:none;
+  transition:background .35s ease;
+}
+.policy-overlay.open{
+  background:rgba(0,0,0,.7);
+  pointer-events:auto;
+}
+.policy-page{
+  background:var(--bg);width:100%;max-width:740px;
+  height:100vh;overflow-y:auto;padding:0 0 60px;
+  transform:translateX(100%);
+  transition:transform .4s cubic-bezier(.4,0,.2,1);
+  position:relative;flex-shrink:0;
+}
+.policy-overlay.open .policy-page{transform:translateX(0);}
+.policy-page-header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:16px 20px;
+  display:flex;align-items:center;gap:14px;
+  position:sticky;top:0;z-index:10;
+}
+.policy-back-btn{
+  display:flex;align-items:center;gap:6px;
+  background:none;border:none;color:var(--text2);cursor:pointer;
+  font-size:.88rem;padding:6px 10px;border-radius:8px;
+  transition:all .2s;
+}
+.policy-back-btn:hover{color:var(--primary);background:rgba(246,139,30,.08);}
+.policy-page-title{font-size:1rem;font-weight:700;flex:1;}
+.policy-body{padding:28px 24px;}
+.policy-body h2{font-size:1.2rem;font-weight:800;margin-bottom:16px;color:var(--primary);}
+.policy-body h3{font-size:1rem;font-weight:700;margin:22px 0 8px;}
+.policy-body p,.policy-body li{font-size:.88rem;color:var(--text2);line-height:1.75;margin-bottom:8px;}
+.policy-body ul,.policy-body ol{padding-left:20px;margin-bottom:12px;}
+.policy-body li{margin-bottom:6px;}
+.policy-section{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px 20px;margin-bottom:14px;
+  opacity:0;transform:translateY(16px);
+  transition:opacity .4s ease,transform .4s ease;
+}
+.policy-overlay.open .policy-section{opacity:1;transform:translateY(0);}
+.policy-overlay.open .policy-section:nth-child(1){transition-delay:.1s;}
+.policy-overlay.open .policy-section:nth-child(2){transition-delay:.18s;}
+.policy-overlay.open .policy-section:nth-child(3){transition-delay:.26s;}
+.policy-overlay.open .policy-section:nth-child(4){transition-delay:.34s;}
+.policy-overlay.open .policy-section:nth-child(5){transition-delay:.42s;}
+.policy-overlay.open .policy-section:nth-child(6){transition-delay:.50s;}
+.policy-section h3{margin-top:0;color:var(--text);}
+
+/* AUTH CONTAINER */
+.auth-container{max-width:680px;margin:0 auto;padding:0 20px 60px;}
+.auth-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:12px;padding:4px;margin-bottom:28px;}
+.auth-tab{flex:1;padding:12px;background:transparent;border:none;border-radius:10px;color:var(--text2);font-size:.9rem;cursor:pointer;transition:all .25s;font-weight:500;}
+.auth-tab.active{background:var(--primary);color:#fff;font-weight:700;}
+.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px 28px;box-shadow:var(--shadow);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-group{margin-bottom:18px;}
+label{display:block;font-size:.8rem;color:var(--text2);margin-bottom:6px;font-weight:500;}
+label span.req{color:var(--error);}
+input,select,textarea{width:100%;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:.9rem;outline:none;transition:border-color .25s;}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);}
+textarea{resize:vertical;min-height:90px;}
+select option{background:var(--surface2);}
+.btn{padding:14px;border-radius:10px;border:none;font-size:1rem;font-weight:600;cursor:pointer;transition:all .25s;width:100%;}
+.btn-gold{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(246,139,30,0.35);}
+.btn-gold:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary);}
+
+/* MULTI-STEP REGISTRATION */
+.step-progress{display:flex;align-items:center;margin-bottom:28px;gap:0;}
+.step-item{display:flex;flex-direction:column;align-items:center;flex:1;position:relative;}
+.step-item:not(:last-child)::after{content:'';position:absolute;top:17px;left:50%;width:100%;height:2px;background:var(--border);z-index:0;}
+.step-item.done:not(:last-child)::after,.step-item.active:not(:last-child)::after{background:var(--primary);}
+.step-circle{width:34px;height:34px;border-radius:50%;border:2px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--text2);z-index:1;transition:all .3s;}
+.step-item.active .step-circle{border-color:var(--primary);background:var(--primary);color:#fff;}
+.step-item.done .step-circle{border-color:var(--primary);background:var(--primary);color:#fff;}
+.step-label{font-size:.7rem;color:var(--text2);margin-top:6px;text-align:center;}
+.step-item.active .step-label{color:var(--primary);}
+.reg-step{display:none;}
+.reg-step.active{display:block;}
+.review-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:.87rem;}
+.review-label{color:var(--text2);}
+.review-val{font-weight:600;color:var(--text);}
+
+/* DASHBOARD */
+.dashboard{display:none;padding:20px;max-width:960px;margin:0 auto;}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+.dash-welcome{font-size:1.3rem;font-weight:700;}
+.dash-welcome span{color:var(--primary);}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:24px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 14px;text-align:center;cursor:default;}
+.stat-n{font-size:1.4rem;font-weight:800;color:var(--primary);}
+.stat-l{font-size:.74rem;color:var(--text2);margin-top:3px;}
+.stat-delta{font-size:.7rem;margin-top:4px;}
+.delta-up{color:var(--success);}
+.delta-dn{color:var(--error);}
+.dash-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:10px;padding:4px;margin-bottom:24px;overflow-x:auto;scrollbar-width:none;}
+.dash-tabs::-webkit-scrollbar{display:none;}
+.dash-tab{white-space:nowrap;padding:9px 16px;background:transparent;border:none;border-radius:8px;color:var(--text2);font-size:.85rem;cursor:pointer;transition:all .2s;flex-shrink:0;}
+.dash-tab.active{background:var(--primary);color:#fff;font-weight:600;}
+.dash-section{display:none;}
+.dash-section.active{display:block;}
+
+/* PRODUCT FORM */
+.product-form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;}
+.card-title{font-size:1rem;font-weight:700;margin-bottom:18px;color:var(--primary);display:flex;align-items:center;gap:8px;}
+.card-title svg{width:18px;height:18px;}
+
+/* PRODUCT LIST CARDS */
+.prod-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .2s;}
+.prod-card:hover{transform:translateY(-2px);}
+.prod-card-img{width:100%;height:130px;object-fit:cover;background:var(--surface2);}
+.prod-card-body{padding:12px;}
+.prod-card-name{font-size:.88rem;font-weight:600;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.prod-card-cat{font-size:.75rem;color:var(--text2);margin-bottom:8px;}
+.prod-card-footer{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.prod-card-price{font-size:.95rem;font-weight:700;color:var(--primary);}
+.prod-card-actions{display:flex;gap:6px;margin-top:8px;}
+.prod-action-btn{flex:1;padding:7px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;font-size:.78rem;cursor:pointer;color:var(--text);transition:all .2s;font-weight:500;}
+.prod-action-btn:hover{border-color:var(--primary);color:var(--primary);}
+.prod-action-del:hover{border-color:var(--error);color:var(--error);}
+
+/* STATUS BADGES */
+.badge-status{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:.72rem;font-weight:600;}
+.badge-active{background:rgba(82,196,26,.15);color:var(--success);}
+.badge-pending{background:rgba(250,173,20,.15);color:var(--warning);}
+.badge-rejected,.badge-cancelled{background:rgba(255,77,79,.15);color:var(--error);}
+.badge-confirmed{background:rgba(82,196,26,.15);color:var(--success);}
+.badge-shipped{background:rgba(24,144,255,.15);color:#1890ff;}
+.badge-delivered{background:rgba(246,139,30,.12);color:var(--primary);}
+
+/* ORDERS */
+.order-filter-tabs{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;}
+.order-filter-tabs::-webkit-scrollbar{display:none;}
+.ofilter{white-space:nowrap;padding:7px 14px;border-radius:20px;font-size:.8rem;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);transition:all .2s;}
+.ofilter.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+.order-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;transition:border-color .2s;}
+.order-card:hover{border-color:rgba(246,139,30,.35);}
+.order-card-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;}
+.order-id{font-size:.82rem;font-weight:700;color:var(--text);}
+.order-meta{font-size:.76rem;color:var(--text2);margin-top:2px;}
+.order-amount{font-size:.95rem;font-weight:700;color:var(--primary);}
+.order-body{padding:0 16px;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;}
+.order-body.open{max-height:600px;padding:0 16px 16px;}
+.order-detail-row{display:flex;justify-content:space-between;padding:6px 0;font-size:.85rem;border-bottom:1px solid var(--border);}
+.order-detail-row:last-child{border-bottom:none;}
+.order-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.oact-btn{padding:8px 14px;border-radius:8px;font-size:.82rem;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-weight:500;transition:all .2s;}
+.oact-btn:hover{border-color:var(--primary);color:var(--primary);}
+.oact-confirm{background:rgba(82,196,26,.12);border-color:var(--success);color:var(--success);}
+.oact-ship{background:rgba(24,144,255,.12);border-color:#1890ff;color:#1890ff;}
+.oact-cancel{background:rgba(255,77,79,.08);border-color:var(--error);color:var(--error);}
+
+/* ANALYTICS */
+.analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:24px;}
+.analytics-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
+.analytics-card h4{font-size:.85rem;color:var(--text2);font-weight:600;margin-bottom:16px;text-transform:uppercase;letter-spacing:.5px;}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:80px;}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.bar-fill{width:100%;border-radius:4px 4px 0 0;background:linear-gradient(0deg,var(--primary-dark),var(--primary));min-height:4px;transition:height .5s ease;}
+.bar-label{font-size:.62rem;color:var(--text2);}
+.top-product-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.top-product-row:last-child{border-bottom:none;}
+.top-prod-rank{width:22px;height:22px;border-radius:50%;background:var(--primary-light,rgba(246,139,30,.12));color:var(--primary);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.top-prod-name{font-size:.85rem;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.top-prod-sales{font-size:.8rem;color:var(--primary);font-weight:600;}
+
+/* PROFILE */
+.profile-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:16px;}
+.profile-section h4{font-size:.9rem;font-weight:700;margin-bottom:18px;color:var(--primary);display:flex;align-items:center;gap:8px;}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:#fff;margin:0 auto 16px;border:3px solid rgba(246,139,30,.25);}
+.danger-zone{background:rgba(255,77,79,.06);border:1px solid rgba(255,77,79,.25);border-radius:var(--radius);padding:20px;margin-top:16px;}
+.danger-zone h4{color:var(--error);font-size:.88rem;font-weight:700;margin-bottom:12px;}
+.danger-btn{padding:10px 20px;background:transparent;border:1px solid var(--error);color:var(--error);border-radius:8px;font-size:.85rem;cursor:pointer;font-weight:600;transition:all .2s;}
+.danger-btn:hover{background:var(--error);color:#fff;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.modal-title{font-size:1rem;font-weight:700;}
+.modal-close{background:none;border:none;color:var(--text2);cursor:pointer;padding:4px;}
+
+/* STATUS BADGE */
+.status-bar{background:rgba(246,139,30,0.10);color:var(--primary);border:1px solid var(--primary);border-radius:8px;padding:8px 14px;font-size:.82rem;text-align:center;margin-bottom:20px;}
+
+/* ORDERS TABLE */
+.orders-table{width:100%;border-collapse:collapse;}
+.orders-table th,.orders-table td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border);font-size:.85rem;}
+.orders-table th{color:var(--text2);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;}
+
+/* TOAST */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-120px);background:var(--surface);border-radius:12px;padding:14px 22px;font-size:.9rem;box-shadow:0 8px 30px rgba(0,0,0,.5);z-index:9000;transition:transform .4s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;gap:10px;min-width:280px;max-width:90vw;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.success{border-left:3px solid var(--success);}
+.toast.error{border-left:3px solid var(--error);}
+.toast.warning{border-left:3px solid var(--warning);}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.pw-toggle{position:relative;}
+.pw-toggle input{padding-right:42px;}
+.pw-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text2);cursor:pointer;padding:4px;}
+.spinner-wrap{text-align:center;padding:32px;color:var(--text2);}
+.empty-state{text-align:center;padding:40px;color:var(--text2);}
+
+@media(max-width:600px){
+  .two-col{grid-template-columns:1fr;}
+  .auth-card{padding:20px 16px;}
+  .modal-box{padding:20px 16px;}
+  .hero{min-height:auto;padding:52px 16px 44px;}
+  .cta-btn{min-width:160px;padding:14px 24px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand" onclick="goHome()">
+    <img src="zmafrdeal.png" alt="Zmafrdeal" class="nav-logo"
+      style="border-radius:50%;object-fit:contain;background:rgba(255,255,255,0.15);"
+      onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex';"/>
+    <div style="display:none;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.22);align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;font-family:Arial;">ZD</div>
+    <span class="nav-name">ZMAFRDEAL</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn btn-ghost" onclick="goHome()">Back to Store</button>
+    <button class="nav-btn btn-primary" id="navLogout" onclick="doLogout()" style="display:none;">Logout</button>
+  </div>
+</nav>
+
+<!-- ======================================================= LANDING ======================================================= -->
+<div id="sellerLanding">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-bg-img"></div>
+    <div class="hero-bg-overlay"></div>
+
+    <div class="hero-content">
+
+      <!-- SVG Brand Mark / Illustration -->
+      <svg class="hero-logo-svg" width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="36" cy="36" r="36" fill="rgba(255,255,255,0.18)"/>
+        <circle cx="36" cy="36" r="28" fill="rgba(255,255,255,0.12)"/>
+        <!-- Store house icon -->
+        <path d="M36 14 L54 28 L54 56 L18 56 L18 28 Z" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+        <!-- Door -->
+        <rect x="30" y="40" width="12" height="16" rx="2" fill="white" opacity="0.9"/>
+        <!-- Window -->
+        <rect x="22" y="34" width="10" height="8" rx="1.5" fill="white" opacity="0.7"/>
+        <rect x="40" y="34" width="10" height="8" rx="1.5" fill="white" opacity="0.7"/>
+        <!-- Roof accent -->
+        <path d="M24 28 L36 20 L48 28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <!-- Star on top -->
+        <circle cx="36" cy="16" r="4" fill="#fff8e8"/>
+        <text x="36" y="19.5" text-anchor="middle" font-size="6" font-weight="900" fill="#f68b1e">★</text>
+      </svg>
+
+      <div class="hero-tag">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Earn with Zmafrdeal
+      </div>
+
+      <h1>Sell Across <em>Africa</em><br/>Reach Millions of Buyers</h1>
+
+      <p class="hero-sub">
+        Join thousands of thriving sellers on Zmafrdeal — Sierra Leone's fastest-growing marketplace.
+        We make it simple, supportive, and rewarding to grow your business.
+      </p>
+
+      <!-- Friendly commission pill -->
+      <div class="hero-commission-pill">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>No setup fees &bull; No monthly charges &bull; <strong>Keep 90%</strong> of every sale</span>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-n">50K+</div>
+          <div class="hero-stat-l">Active Buyers</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-n">90%</div>
+          <div class="hero-stat-l">You Keep</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-n">24h</div>
+          <div class="hero-stat-l">Approval Time</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-n">40+</div>
+          <div class="hero-stat-l">African Countries</div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="cta-btn cta-primary" onclick="showAuth('register')">Start Selling Today</button>
+        <button class="cta-btn cta-outline" onclick="showAuth('login')">Seller Login</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <div class="trust-inner">
+      <div class="trust-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#52c41a" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Verified &amp; Secure</span>
+      </div>
+      <div class="trust-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#f68b1e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>24h Admin Review</span>
+      </div>
+      <div class="trust-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1890ff" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.85 3.44 2 2 0 0 1 3.83 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.98-.98a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span>WhatsApp Support</span>
+      </div>
+      <div class="trust-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#f68b1e" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <span>Mobile Money Accepted</span>
+      </div>
+      <div class="trust-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#52c41a" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>50,000+ Buyers Waiting</span>
+      </div>
+      <div class="trust-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#faad14" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>4.9★ Seller Rating</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY SELL — IMAGE LEFT -->
+  <div class="highlight-section">
+    <div class="highlight-grid">
+      <div class="highlight-img-wrap">
+        <img src="seller-success.svg" alt="Happy sellers on Zmafrdeal" loading="lazy"/>
+      </div>
+      <div class="highlight-text">
+        <h2>Built for <span>African Sellers</span>, by People Who Care</h2>
+        <p>
+          We believe every seller deserves a fair shot. That's why we charge a simple, honest
+          10% only when you make a sale — no hidden fees, no monthly subscriptions, nothing upfront.
+          You only pay when you earn.
+        </p>
+        <ul class="highlight-bullets">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Start listing for free — zero cost to join
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Keep 90% of everything you sell, always
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Friendly admin team approves your store in 24 hours
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Get WhatsApp order alerts instantly — never miss a sale
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- REACH — IMAGE RIGHT -->
+  <div class="highlight-section" style="padding-top:0;">
+    <div class="highlight-grid reverse">
+      <div class="highlight-img-wrap">
+        <img src="africa-reach.svg" alt="Sell across 40+ African countries" loading="lazy"/>
+      </div>
+      <div class="highlight-text">
+        <h2>Reach <span>40+ Countries</span> Across Africa</h2>
+        <p>
+          Your products don't have to stay local. Zmafrdeal connects you to buyers in Sierra Leone,
+          Nigeria, Ghana, Kenya, South Africa, and beyond — with full currency and payment support for each market.
+        </p>
+        <ul class="highlight-bullets">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Multi-currency pricing for all African markets
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Buyers across the continent see your listings
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Choose which countries to target per product
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div class="section-title">Everything You Need to Succeed</div>
+      <div class="section-sub">Powerful tools built right into your seller dashboard</div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="feature-title">Secure Payments</div>
+        <div class="feature-desc">Mobile money and pay-after-delivery options trusted across Africa. Your earnings are protected.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div class="feature-title">Wide Reach</div>
+        <div class="feature-desc">Sell to buyers across 40+ African countries. Your store is visible to millions of shoppers.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div class="feature-title">Easy Management</div>
+        <div class="feature-desc">Post products, manage orders, and track your earnings — all from one simple dashboard.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="feature-title">You Keep 90%</div>
+        <div class="feature-desc">Just a friendly 10% platform fee when you sell. No upfront costs, no monthly fees — ever.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.85 3.44 2 2 0 0 1 3.83 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.98-.98a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div class="feature-title">WhatsApp Alerts</div>
+        <div class="feature-desc">Receive order notifications instantly via WhatsApp. Never miss a sale, even on the go.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="feature-title">Sales Analytics</div>
+        <div class="feature-desc">Track views, orders, revenue, and top products. Know exactly how your store is growing.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECURE PAYMENT IMAGE -->
+  <div style="padding:0 20px 56px;max-width:960px;margin:0 auto;">
+    <div class="highlight-grid">
+      <div class="highlight-text">
+        <h2><span>Safe & Instant</span> Payment Collection</h2>
+        <p>
+          Customers can pay by mobile money, card, or choose pay-after-delivery — whatever they trust.
+          Your earnings are tracked in real time and you can withdraw anytime.
+        </p>
+        <ul class="highlight-bullets">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Orange Money, Africell, and major mobile wallets
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            All payments tracked transparently in your dashboard
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Fraud protection on every transaction
+          </li>
+        </ul>
+      </div>
+      <div class="highlight-img-wrap">
+        <img src="secure-payment.svg" alt="Secure mobile money payments" loading="lazy"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <div class="testimonials-section">
+    <div class="testimonials-heading">
+      <div class="section-title">What Our Sellers Say</div>
+      <div class="section-sub">Real stories from real sellers growing their businesses on Zmafrdeal</div>
+    </div>
+
+    <div class="testimonials-track-wrap" id="testimonialsWrap">
+      <div class="testimonials-track" id="testimonialsTrack">
+        <!-- 5 testimonials × 2 (duplicated for seamless loop) -->
+        <div class="tcard">
+          <div class="tcard-stars">★★★★★</div>
+          <div class="tcard-quote">"I listed my first product and got 3 orders within the same week. The WhatsApp notifications make it so easy — I never miss anything!"</div>
+          <div class="tcard-author">
+            <div class="tcard-avatar">AM</div>
+            <div>
+              <div class="tcard-name">Aisha Mansaray</div>
+              <div class="tcard-meta">Fashion Seller · Freetown, SL</div>
+            </div>
+          </div>
+        </div>
+        <div class="tcard">
+          <div class="tcard-stars">★★★★★</div>
+          <div class="tcard-quote">"The dashboard is so simple. I manage all my electronics orders from my phone. Approval took less than 24 hours and I was selling by evening!"</div>
+          <div class="tcard-author">
+            <div class="tcard-avatar">KB</div>
+            <div>
+              <div class="tcard-name">Kofi Boateng</div>
+              <div class="tcard-meta">Electronics · Accra, Ghana</div>
+            </div>
+          </div>
+        </div>
+        <div class="tcard">
+          <div class="tcard-stars">★★★★★</div>
+          <div class="tcard-quote">"I love that I only pay commission when I sell. No risk at all. I've tripled my income in just 2 months by reaching buyers I never could before."</div>
+          <div class="tcard-author">
+            <div class="tcard-avatar">FD</div>
+            <div>
+              <div class="tcard-name">Fatima Dumbuya</div>
+              <div class="tcard-meta">Health &amp; Beauty · Bo, SL</div>
+            </div>
+          </div>
+        </div>
+        <div class="tcard">
+          <div class="tcard-stars">★★★★★</div>
+          <div class="tcard-quote">"Zmafrdeal is the best platform for African sellers. The admin team is helpful and the platform is honest. My store has grown beyond my expectations."</div>
+          <div class="tcard-author">
+            <div class="tcard-avatar">MK</div>
+            <div>
+              <div class="tcard-name">Mohammed Kamara</div>
+              <div class="tcard-meta">Home &amp; Office · Makeni, SL</div>
+            </div>
+          </div>
+        </div>
+        <div class="tcard">
+          <div class="tcard-stars">★★★★★</div>
+          <div class="tcard-quote">"Starting my store was free and took 10 minutes. Now I get consistent daily orders. The flash sale feature alone boosted my sales by 60% last month!"</div>
+          <div class="tcard-author">
+            <div class="tcard-avatar">EC</div>
+            <div>
+              <div class="tcard-name">Emmanuel Conteh</div>
+              <div class="tcard-meta">Phones &amp; Tablets · Lagos, NG</div>
+            </div>
+          </div>
+        </div>
+        <!-- Duplicate for seamless loop -->
+        <div class="tcard">
+          <div class="tcard-stars">★★★★★</div>
+          <div class="tcard-quote">"I listed my first product and got 3 orders within the same week. The WhatsApp notifications make it so easy — I never miss anything!"</div>
+          <div class="tcard-author">
+            <div class="tcard-avatar">AM</div>
+            <div>
+              <div class="tcard-name">Aisha Mansaray</div>
+              <div class="tcard-meta">Fashion Seller · Freetown, SL</div>
+            </div>
+          </div>
+        </div>
+        <div class="tcard">
+          <div class="tcard-stars">★★★★★</div>
+          <div class="tcard-quote">"The dashboard is so simple. I manage all my electronics orders from my phone. Approval took less than 24 hours and I was selling by evening!"</div>
+          <div class="tcard-author">
+            <div class="tcard-avatar">KB</div>
+            <div>
+              <div class="tcard-name">Kofi Boateng</div>
+              <div class="tcard-meta">Electronics · Accra, Ghana</div>
+            </div>
+          </div>
+        </div>
+        <div class="tcard">
+          <div class="tcard-stars">★★★★★</div>
+          <div class="tcard-quote">"I love that I only pay commission when I sell. No risk at all. I've tripled my income in just 2 months by reaching buyers I never could before."</div>
+          <div class="tcard-author">
+            <div class="tcard-avatar">FD</div>
+            <div>
+              <div class="tcard-name">Fatima Dumbuya</div>
+              <div class="tcard-meta">Health &amp; Beauty · Bo, SL</div>
+            </div>
+          </div>
+        </div>
+        <div class="tcard">
+          <div class="tcard-stars">★★★★★</div>
+          <div class="tcard-quote">"Zmafrdeal is the best platform for African sellers. The admin team is helpful and the platform is honest. My store has grown beyond my expectations."</div>
+          <div class="tcard-author">
+            <div class="tcard-avatar">MK</div>
+            <div>
+              <div class="tcard-name">Mohammed Kamara</div>
+              <div class="tcard-meta">Home &amp; Office · Makeni, SL</div>
+            </div>
+          </div>
+        </div>
+        <div class="tcard">
+          <div class="tcard-stars">★★★★★</div>
+          <div class="tcard-quote">"Starting my store was free and took 10 minutes. Now I get consistent daily orders. The flash sale feature alone boosted my sales by 60% last month!"</div>
+          <div class="tcard-author">
+            <div class="tcard-avatar">EC</div>
+            <div>
+              <div class="tcard-name">Emmanuel Conteh</div>
+              <div class="tcard-meta">Phones &amp; Tablets · Lagos, NG</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <div style="text-align:center;margin-bottom:36px;">
+      <div class="section-title">Frequently Asked Questions</div>
+      <div class="section-sub">Everything you need to know before you start selling</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q">
+        How much does it cost to start selling on Zmafrdeal?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">
+          Starting is completely free. There are no registration fees, no monthly charges, and no upfront costs. We only take a small 10% platform fee when you make a sale — meaning you keep 90% of every transaction. If you're not selling, you pay nothing.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q">
+        How long does seller approval take?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">
+          Our admin team reviews all seller applications within 24 hours. Most applications are approved the same day. Once approved, you can immediately start listing products and accepting orders. You'll receive a notification when your account is ready.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q">
+        How do I receive payment for my orders?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">
+          Buyers can pay via mobile money (Orange Money, Africell, etc.), card, or choose pay-after-delivery. Your earnings are tracked in your seller dashboard. Withdrawals are processed to your registered mobile money number or bank account on request. Contact support to set up your withdrawal method.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q">
+        Can I sell from outside Sierra Leone?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">
+          Yes! Zmafrdeal welcomes sellers from across Africa. We currently support sellers from Sierra Leone, Nigeria, Ghana, Kenya, Uganda, Tanzania, South Africa, and 35+ other African countries. Your products can also be listed to buyers in all these markets simultaneously.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q">
+        What types of products can I sell?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">
+          You can sell across 18 categories including Fashion, Electronics, Home &amp; Office, Health &amp; Beauty, Phones &amp; Tablets, Food &amp; Beverages, Baby Products, Sporting Goods, Books, and more. All products go through an admin review before appearing in the store to ensure quality for buyers.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q">
+        How do I get notified when I receive an order?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">
+          You'll receive instant WhatsApp notifications for every new order, as well as in-app notifications in your seller dashboard. You can confirm, ship, or manage orders directly from your dashboard. Most sellers respond to orders within minutes using WhatsApp.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q">
+        What is the return policy for sellers?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">
+          Sellers are expected to accept returns within 7 days for defective or incorrectly described products. Each seller can set their own return window (up to 14 days). Once a return is agreed, the seller must arrange collection or ask the buyer to send back the item. Read our full Seller Return Policy below for details.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POLICIES BAR -->
+  <div class="policies-bar">
+    <div class="policies-inner">
+      <p>By selling on Zmafrdeal you agree to our platform policies. Read them below — they're clear and fair.</p>
+      <div class="policy-links">
+        <button class="policy-link-btn" onclick="openPolicy('seller-terms')">Seller Terms &amp; Conditions</button>
+        <button class="policy-link-btn" onclick="openPolicy('return-policy')">Return &amp; Refund Policy</button>
+        <button class="policy-link-btn" onclick="openPolicy('commission-policy')">Commission Policy</button>
+        <button class="policy-link-btn" onclick="openPolicy('privacy-policy')">Privacy Policy</button>
+        <button class="policy-link-btn" onclick="openPolicy('prohibited-items')">Prohibited Items</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== AUTH SECTION ===== -->
+  <div class="auth-container" id="authSection" style="padding-top:48px;">
+    <div style="text-align:center;margin-bottom:32px;">
+      <div class="section-title">Ready to Start?</div>
+      <div class="section-sub">Create your seller account or sign in to your existing store</div>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="atLogin" onclick="showAuth('login')">Seller Login</button>
+      <button class="auth-tab" id="atRegister" onclick="showAuth('register')">Register as Seller</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="sellerLoginForm" class="auth-card">
+      <h3 style="margin-bottom:6px;">Welcome Back, Seller</h3>
+      <p style="color:var(--text2);font-size:.85rem;margin-bottom:24px;">Sign in to manage your store and orders.</p>
+      <div class="form-group">
+        <label>Email <span class="req">*</span></label>
+        <input type="email" id="slEmail" placeholder="seller@email.com" onkeydown="if(event.key==='Enter')doSellerLogin()"/>
+      </div>
+      <div class="form-group">
+        <label>Password <span class="req">*</span></label>
+        <div class="pw-toggle">
+          <input type="password" id="slPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doSellerLogin()"/>
+          <button class="pw-eye" type="button" onclick="togglePw('slPassword',this)" title="Show/hide password">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <button class="btn btn-gold" onclick="doSellerLogin()" id="slBtn">Sign In to Dashboard</button>
+      <p style="text-align:center;margin-top:14px;font-size:.82rem;color:var(--text2);">Don't have an account? <span style="color:var(--primary);cursor:pointer;" onclick="showAuth('register')">Register here</span></p>
+    </div>
+
+    <!-- REGISTER (MULTI-STEP) -->
+    <div id="sellerRegisterForm" class="auth-card" style="display:none;">
+      <h3 style="margin-bottom:6px;">Apply to Sell on Zmafrdeal</h3>
+      <p style="color:var(--text2);font-size:.85rem;margin-bottom:22px;">Complete all steps. Admin will review within 24 hours.</p>
+
+      <div class="step-progress" id="stepProgress">
+        <div class="step-item active" id="step1Dot">
+          <div class="step-circle">1</div>
+          <div class="step-label">Account</div>
+        </div>
+        <div class="step-item" id="step2Dot">
+          <div class="step-circle">2</div>
+          <div class="step-label">Business</div>
+        </div>
+        <div class="step-item" id="step3Dot">
+          <div class="step-circle">3</div>
+          <div class="step-label">Review</div>
+        </div>
+      </div>
+
+      <!-- Step 1: Account Info -->
+      <div class="reg-step active" id="regStep1">
+        <div class="two-col">
+          <div class="form-group">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" id="srName" placeholder="Your full name"/>
+          </div>
+          <div class="form-group">
+            <label>Email <span class="req">*</span></label>
+            <input type="email" id="srEmail" placeholder="you@email.com"/>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="form-group">
+            <label>Password <span class="req">*</span></label>
+            <div class="pw-toggle">
+              <input type="password" id="srPassword" placeholder="Min 8 characters"/>
+              <button class="pw-eye" type="button" onclick="togglePw('srPassword',this)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Confirm Password <span class="req">*</span></label>
+            <div class="pw-toggle">
+              <input type="password" id="srConfirmPw" placeholder="Repeat password"/>
+              <button class="pw-eye" type="button" onclick="togglePw('srConfirmPw',this)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="form-group">
+            <label>Phone <span class="req">*</span></label>
+            <input type="tel" id="srPhone" placeholder="+232 XX XXX XXX"/>
+          </div>
+          <div class="form-group">
+            <label>Country <span class="req">*</span></label>
+            <select id="srCountry">
+              <option value="">Select country</option>
+              <option value="Sierra Leone" selected>Sierra Leone</option>
+              <option value="Nigeria">Nigeria</option>
+              <option value="Ghana">Ghana</option>
+              <option value="Kenya">Kenya</option>
+              <option value="Uganda">Uganda</option>
+              <option value="Tanzania">Tanzania</option>
+              <option value="South Africa">South Africa</option>
+              <option value="Zambia">Zambia</option>
+              <option value="DRC Congo">DRC Congo</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-gold" onclick="nextRegStep(1)">Continue to Business Info</button>
+      </div>
+
+      <!-- Step 2: Business Info -->
+      <div class="reg-step" id="regStep2">
+        <div class="two-col">
+          <div class="form-group">
+            <label>Business Name <span class="req">*</span></label>
+            <input type="text" id="srBusiness" placeholder="Your store / business name"/>
+          </div>
+          <div class="form-group">
+            <label>Business Type <span class="req">*</span></label>
+            <select id="srBusinessType">
+              <option value="">Select type</option>
+              <option>Retail Store</option>
+              <option>Wholesale</option>
+              <option>Individual Seller</option>
+              <option>Manufacturer</option>
+              <option>Distributor</option>
+              <option>Importer</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Business Address</label>
+          <input type="text" id="srAddress" placeholder="City, Street Address"/>
+        </div>
+        <div class="form-group">
+          <label>ID Number (optional)</label>
+          <input type="text" id="srIdNum" placeholder="National ID / Passport number"/>
+        </div>
+        <div class="form-group">
+          <label>Tell Us About Your Business <span class="req">*</span></label>
+          <textarea id="srDesc" placeholder="What do you sell? Who are your customers? (min. 30 characters)" style="min-height:100px;"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-outline" onclick="prevRegStep(2)" style="flex:.4;">Back</button>
+          <button class="btn btn-gold" onclick="nextRegStep(2)" style="flex:1;">Review Application</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Review -->
+      <div class="reg-step" id="regStep3">
+        <div style="margin-bottom:20px;">
+          <div class="review-row"><span class="review-label">Full Name</span><span class="review-val" id="rv-name"></span></div>
+          <div class="review-row"><span class="review-label">Email</span><span class="review-val" id="rv-email"></span></div>
+          <div class="review-row"><span class="review-label">Phone</span><span class="review-val" id="rv-phone"></span></div>
+          <div class="review-row"><span class="review-label">Country</span><span class="review-val" id="rv-country"></span></div>
+          <div class="review-row"><span class="review-label">Business Name</span><span class="review-val" id="rv-biz"></span></div>
+          <div class="review-row"><span class="review-label">Business Type</span><span class="review-val" id="rv-btype"></span></div>
+          <div class="review-row"><span class="review-label">Address</span><span class="review-val" id="rv-addr"></span></div>
+        </div>
+        <div style="background:rgba(246,139,30,.08);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:20px;font-size:.82rem;color:var(--text2);line-height:1.6;">
+          By submitting, you agree to our <span style="color:var(--primary);cursor:pointer;" onclick="openPolicy('seller-terms')">Seller Terms &amp; Conditions</span> and <span style="color:var(--primary);cursor:pointer;" onclick="openPolicy('return-policy')">Return Policy</span>.
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-outline" onclick="prevRegStep(3)" style="flex:.4;">Back</button>
+          <button class="btn btn-gold" onclick="doSellerRegister()" id="srBtn" style="flex:1;">Submit Application</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================= DASHBOARD ======================================================= -->
+<div class="dashboard" id="sellerDashboard" style="display:none;">
+    <div class="dash-header">
+      <div>
+        <div class="dash-welcome">Welcome back, <span id="sellerName">Seller</span></div>
+        <div id="sellerStoreName" style="font-size:.82rem;color:var(--text2);margin-top:2px;"></div>
+      </div>
+      <button class="nav-btn btn-primary" style="padding:9px 16px;font-size:.82rem;" onclick="switchDash('addProduct')">+ Post New Product</button>
+    </div>
+    <div id="sellerStatusBadge"></div>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-n" id="statProducts">0</div>
+        <div class="stat-l">Products</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n" id="statOrders">0</div>
+        <div class="stat-l">Total Orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n" id="statRevenue">0</div>
+        <div class="stat-l">Revenue</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n" id="statPending">0</div>
+        <div class="stat-l">Pending Orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n" id="statViews">0</div>
+        <div class="stat-l">Total Views</div>
+      </div>
+    </div>
+
+    <div class="dash-tabs">
+      <button class="dash-tab active" onclick="switchDash('products')">My Products</button>
+      <button class="dash-tab" onclick="switchDash('addProduct')">Post Product</button>
+      <button class="dash-tab" onclick="switchDash('orders')">Orders</button>
+      <button class="dash-tab" onclick="switchDash('flashSale')">Flash Sale</button>
+      <button class="dash-tab" onclick="switchDash('analytics')">Analytics</button>
+      <button class="dash-tab" onclick="switchDash('notifications')">Notifications</button>
+      <button class="dash-tab" onclick="switchDash('reviews')">Reviews</button>
+      <button class="dash-tab" onclick="switchDash('profile')">Profile</button>
+      <button class="dash-tab" onclick="switchDash('messages')" id="msgTab">💬 Messages</button>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="dash-section active" id="dashProducts">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+        <div style="font-size:.9rem;color:var(--text2);" id="prodListCount">0 products</div>
+        <button class="nav-btn btn-primary" style="padding:9px 16px;font-size:.82rem;" onclick="switchDash('addProduct')">+ Post New Product</button>
+      </div>
+      <div id="productsList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;"></div>
+      <div id="noProducts" style="text-align:center;padding:48px;color:var(--text2);display:none;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="margin:0 auto 14px;display:block;opacity:.4;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <div style="font-size:1rem;margin-bottom:8px;">No products yet</div>
+        <div style="font-size:.85rem;margin-bottom:18px;">Click "Post Product" to list your first product.</div>
+        <button class="btn btn-gold" style="width:auto;padding:12px 28px;" onclick="switchDash('addProduct')">Post Your First Product</button>
+      </div>
+    </div>
+
+    <!-- ADD PRODUCT -->
+    <div class="dash-section" id="dashAddProduct">
+      <div class="product-form-card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> Product Info
+        </div>
+        <div class="form-group">
+          <label>Product Name <span class="req">*</span></label>
+          <input type="text" id="pName" placeholder="Full product name"/>
+        </div>
+        <div class="two-col">
+          <div class="form-group">
+            <label>Category <span class="req">*</span></label>
+            <select id="pCategory"><option value="">Select category</option></select>
+          </div>
+          <div class="form-group">
+            <label>Brand</label>
+            <input type="text" id="pBrand" placeholder="Brand name"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description <span class="req">*</span></label>
+          <textarea id="pDesc" placeholder="Full product description..." style="min-height:110px;"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Specifications (one per line)</label>
+          <textarea id="pSpecs" placeholder="- Battery: 5000mAh&#10;- Screen: 6.5 inch&#10;- Camera: 48MP"></textarea>
+        </div>
+        <div class="form-group">
+          <label>How to Use (optional)</label>
+          <textarea id="pHowToUse" placeholder="Step-by-step instructions..."></textarea>
+        </div>
+      </div>
+
+      <div class="product-form-card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Pricing &amp; Stock
+        </div>
+        <div class="two-col">
+          <div class="form-group">
+            <label>Price (<span class="curr-label">SLL</span>) <span class="req">*</span></label>
+            <input type="number" id="pPrice" placeholder="0" min="0"/>
+          </div>
+          <div class="form-group">
+            <label>Previous Price (<span class="curr-label">SLL</span>)</label>
+            <input type="number" id="pPrevPrice" placeholder="0 (for showing discount)" min="0"/>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="form-group">
+            <label>Stock Available <span class="req">*</span></label>
+            <input type="number" id="pStock" placeholder="0" min="0"/>
+          </div>
+          <div class="form-group">
+            <label>Shipping Fee (<span class="curr-label">SLL</span>)</label>
+            <input type="number" id="pShipping" placeholder="0" min="0"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-form-card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Colours &amp; Sizes
+        </div>
+        <div class="two-col">
+          <div class="form-group">
+            <label>Available Colours (comma separated)</label>
+            <input type="text" id="pColors" placeholder="Red, Blue, Black, White"/>
+          </div>
+          <div class="form-group">
+            <label>Available Sizes (comma separated)</label>
+            <input type="text" id="pSizes" placeholder="S, M, L, XL or 38, 39, 40"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-form-card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Product Photos
+        </div>
+        <div class="form-group">
+          <label>Main Product Photo <span class="req">*</span></label>
+          <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;">
+            <div id="sHomePreview" style="width:88px;height:88px;border:2px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;background:var(--surface3);">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <div style="flex:1;min-width:160px;">
+              <label style="display:inline-flex;align-items:center;gap:8px;background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;cursor:pointer;font-size:.85rem;color:var(--text);width:100%;justify-content:center;margin-bottom:8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Upload Main Photo
+                <input type="file" accept="image/*" style="display:none;" onchange="sUploadHome(this)"/>
+              </label>
+              <div style="font-size:.73rem;color:var(--text2);margin-bottom:4px;">Or paste image URL:</div>
+              <input type="url" id="pHomePhoto" placeholder="https://..." oninput="sPreviewHome(this.value)"/>
+              <div id="sHomeStatus" style="font-size:.75rem;margin-top:4px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Gallery Photos (add 3–6 for better visibility)</label>
+          <div id="sGalleryZone" style="border:2px dashed var(--border);border-radius:10px;padding:22px;text-align:center;cursor:pointer;transition:border-color .25s;" onclick="document.getElementById('sGalleryInput').click()" ondragover="event.preventDefault();this.style.borderColor='var(--primary)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="sDrop(event)">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="1.5" style="margin:0 auto 8px;display:block;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <div style="color:var(--text2);font-size:.85rem;">Drag photos here or click to select multiple</div>
+            <div style="color:var(--text2);font-size:.75rem;margin-top:4px;">JPG, PNG, WebP supported</div>
+            <input type="file" id="sGalleryInput" accept="image/*" multiple style="display:none;" onchange="sUploadGallery(this.files)"/>
+          </div>
+          <div id="sGalleryGrid" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;"></div>
+          <div id="sGalleryStatus" style="font-size:.75rem;margin-top:6px;color:var(--primary);"></div>
+          <div style="font-size:.73rem;color:var(--text2);margin-top:8px;">Or paste comma-separated URLs:</div>
+          <textarea id="pScrollPhotos" placeholder="https://img1.jpg, https://img2.jpg, ..." style="margin-top:6px;"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Additional Photos (more views, packaging, etc.)</label>
+          <div style="border:2px dashed var(--border);border-radius:10px;padding:16px;text-align:center;cursor:pointer;" onclick="document.getElementById('sMoreInput').click()">
+            <div style="color:var(--text2);font-size:.82rem;">+ Add more product photos</div>
+            <input type="file" id="sMoreInput" accept="image/*" multiple style="display:none;" onchange="sUploadMore(this.files)"/>
+          </div>
+          <div id="sMoreGrid" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;"></div>
+          <textarea id="pMorePhotos" placeholder="Or paste URLs: https://img1.jpg, https://img2.jpg, ..." style="min-height:70px;margin-top:8px;"></textarea>
+        </div>
+      </div>
+
+      <button class="btn btn-gold" onclick="doPostProduct()" id="postBtn">Submit Product for Approval</button>
+      <p style="text-align:center;margin-top:10px;font-size:.78rem;color:var(--text2);">Your product will be reviewed by admin before appearing in the store.</p>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="dash-section" id="dashOrders">
+      <div class="order-filter-tabs" id="orderFilterTabs">
+        <button class="ofilter active" onclick="filterOrders('all',this)">All Orders</button>
+        <button class="ofilter" onclick="filterOrders('pending',this)">Pending</button>
+        <button class="ofilter" onclick="filterOrders('confirmed',this)">Confirmed</button>
+        <button class="ofilter" onclick="filterOrders('shipped',this)">Shipped</button>
+        <button class="ofilter" onclick="filterOrders('completed',this)">Completed</button>
+        <button class="ofilter" onclick="filterOrders('cancelled',this)">Cancelled</button>
+      </div>
+      <div id="ordersContainer"></div>
+      <div id="noOrders" style="text-align:center;padding:48px;color:var(--text2);display:none;">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="margin:0 auto 14px;display:block;opacity:.4;"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <div>No orders found for this filter</div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div class="dash-section" id="dashAnalytics">
+      <div class="analytics-grid">
+        <div class="analytics-card" style="grid-column: span 2;">
+          <h4>Revenue Last 6 Months</h4>
+          <div class="bar-chart" id="revenueChart" style="height:100px;"></div>
+        </div>
+        <div class="analytics-card">
+          <h4>Top Products</h4>
+          <div id="topProductsList"></div>
+        </div>
+        <div class="analytics-card">
+          <h4>Order Summary</h4>
+          <div id="orderSummaryChart"></div>
+        </div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;">
+        <h4 style="font-size:.85rem;color:var(--text2);font-weight:600;margin-bottom:16px;text-transform:uppercase;letter-spacing:.5px;">Performance Overview</h4>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;" id="perfStats"></div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="dash-section" id="dashProfile">
+      <div class="profile-section">
+        <h4>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Store Identity
+        </h4>
+        <div class="profile-avatar" id="profileAvatar">ZD</div>
+        <div class="two-col">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="editName" placeholder="Your full name"/>
+          </div>
+          <div class="form-group">
+            <label>Business Name</label>
+            <input type="text" id="editBusiness" placeholder="Your store name"/>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="editPhone" placeholder="+232 XX XXX XXX"/>
+          </div>
+          <div class="form-group">
+            <label>WhatsApp Number</label>
+            <input type="tel" id="editWhatsApp" placeholder="+232 XX XXX XXX"/>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="form-group">
+            <label>Country</label>
+            <select id="editCountry">
+              <option>Sierra Leone</option><option>Zambia</option><option>DRC Congo</option>
+              <option>Uganda</option><option>Nigeria</option><option>Ghana</option>
+              <option>Kenya</option><option>Tanzania</option><option>South Africa</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Business Type</label>
+            <select id="editBizType">
+              <option>Retail Store</option><option>Wholesale</option><option>Individual Seller</option>
+              <option>Manufacturer</option><option>Distributor</option><option>Importer</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Business Address</label>
+          <input type="text" id="editAddress" placeholder="City, Street Address"/>
+        </div>
+        <div class="form-group">
+          <label>Business Description</label>
+          <textarea id="editDesc" placeholder="Describe your store..."></textarea>
+        </div>
+        <button class="btn btn-gold" onclick="saveProfile()" id="saveProfileBtn">Save Changes</button>
+      </div>
+
+      <div class="profile-section">
+        <h4>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Change Password
+        </h4>
+        <div class="form-group">
+          <label>Current Password</label>
+          <div class="pw-toggle">
+            <input type="password" id="pwCurrent" placeholder="••••••••"/>
+            <button class="pw-eye" type="button" onclick="togglePw('pwCurrent',this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="form-group">
+            <label>New Password</label>
+            <div class="pw-toggle">
+              <input type="password" id="pwNew" placeholder="Min 8 characters"/>
+              <button class="pw-eye" type="button" onclick="togglePw('pwNew',this)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Confirm New Password</label>
+            <div class="pw-toggle">
+              <input type="password" id="pwConfirm" placeholder="Repeat new password"/>
+              <button class="pw-eye" type="button" onclick="togglePw('pwConfirm',this)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-gold" onclick="changePassword()" id="changePwBtn">Change Password</button>
+      </div>
+
+      <div class="danger-zone">
+        <h4>Danger Zone</h4>
+        <p style="font-size:.82rem;color:var(--text2);margin-bottom:14px;">These actions are irreversible. Please be certain.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="danger-btn" onclick="confirmDeactivate()">Deactivate Store</button>
+          <button class="danger-btn" onclick="confirmDeleteAccount()">Delete Account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLASH SALE -->
+  <div class="dash-section" id="dashFlashSale">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+      <div>
+        <div style="font-size:1.05rem;font-weight:700;">Flash Sale Manager</div>
+        <div style="font-size:.78rem;color:var(--text2);margin-top:2px;">Put products on timed flash sales with automatic price calculation.</div>
+      </div>
+      <button class="nav-btn btn-ghost" onclick="loadFlashSale()" style="font-size:.8rem;">Refresh</button>
+    </div>
+    <div id="flashSaleList"><div class="spinner-wrap"><div class="spinner"></div></div></div>
+  </div>
+
+  <!-- NOTIFICATIONS -->
+  <div class="dash-section" id="dashNotifications">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div style="font-size:1.05rem;font-weight:700;">Notifications</div>
+      <button class="nav-btn btn-ghost" onclick="loadSellerNotifications()" style="font-size:.8rem;">Refresh</button>
+    </div>
+    <div id="sellerNotifList"><div class="spinner-wrap"><div class="spinner"></div></div></div>
+  </div>
+
+  <!-- REVIEWS -->
+  <div class="dash-section" id="dashReviews">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div style="font-size:1.05rem;font-weight:700;">Product Reviews</div>
+      <button class="nav-btn btn-ghost" onclick="loadSellerReviews()" style="font-size:.8rem;">Refresh</button>
+    </div>
+    <div id="sellerReviewsList"><div class="spinner-wrap"><div class="spinner"></div></div></div>
+  </div>
+
+  <!-- MESSAGES (Seller → Admin Chat) -->
+  <div class="dash-section" id="dashMessages">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
+      <div>
+        <div style="font-size:1.05rem;font-weight:700;">Messages</div>
+        <div style="font-size:.8rem;color:var(--text2);margin-top:2px;">Chat with the Zmafrdeal admin team</div>
+      </div>
+      <button class="nav-btn btn-primary" style="padding:10px 18px;font-size:.85rem;" onclick="openNewSellerMsg()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>New Message
+      </button>
+    </div>
+
+    <!-- Unread badge banner (hidden by default) -->
+    <div id="sellerMsgUnread" style="display:none;background:rgba(246,139,30,.08);border:1px solid rgba(246,139,30,.25);border-radius:10px;padding:11px 14px;font-size:.85rem;color:var(--primary);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span id="sellerMsgUnreadText">You have new replies from admin</span>
+    </div>
+
+    <div id="sellerMsgList" style="display:flex;flex-direction:column;gap:12px;"></div>
+  </div>
+</div>
+
+<!-- ===== SELLER CHAT MODAL ===== -->
+<div class="modal-overlay" id="sellerChatModal" onclick="if(event.target===this)this.classList.remove('open')" style="align-items:flex-end;padding:0;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px 16px 0 0;width:100%;max-width:640px;margin:0 auto;height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 -8px 40px rgba(0,0,0,.5);">
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));padding:16px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;">
+      <div style="width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.22);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900;color:#fff;flex-shrink:0;">Z</div>
+      <div style="flex:1;">
+        <div style="font-weight:800;font-size:1rem;color:#fff;">Zmafrdeal Admin</div>
+        <div style="font-size:.72rem;color:rgba(255,255,255,.75);">Support Team · Usually replies within 24h</div>
+      </div>
+      <button onclick="document.getElementById('sellerChatModal').classList.remove('open')" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;color:#fff;cursor:pointer;padding:8px 10px;display:flex;align-items:center;justify-content:center;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <!-- Chat area -->
+    <div id="sellerChatArea" style="flex:1;min-height:0;padding:18px 16px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;background:var(--bg);"></div>
+    <!-- Compose header (shown when composing new) -->
+    <div id="sellerComposeHdr" style="display:none;padding:8px 14px;background:var(--surface2);border-top:1px solid var(--border);flex-shrink:0;">
+      <input type="text" id="sellerMsgSubject" placeholder="Subject (e.g. Product question, Account issue…)" style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 13px;font-size:.85rem;color:var(--text);outline:none;"/>
+    </div>
+    <!-- Quick starters -->
+    <div id="sellerQuickStarters" style="padding:8px 12px 6px;background:var(--surface2);border-top:1px solid var(--border);flex-shrink:0;">
+      <div style="font-size:.64rem;font-weight:700;color:var(--text2);letter-spacing:.07em;margin-bottom:6px;text-transform:uppercase;">Quick Topics</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;" id="sellerStarterBtns"></div>
+    </div>
+    <!-- Input bar -->
+    <div style="padding:10px 12px;background:var(--surface2);border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;">
+      <input type="hidden" id="sellerChatMsgId" value=""/>
+      <textarea id="sellerMsgInput" rows="2" placeholder="Type your message…" style="flex:1;resize:none;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:14px;color:var(--text);font-size:.9rem;outline:none;max-height:110px;line-height:1.5;" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendSellerMsg();}"></textarea>
+      <button onclick="sendSellerMsg()" id="sellerSendBtn" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));border:none;border-radius:12px;color:#fff;cursor:pointer;padding:12px 16px;flex-shrink:0;height:48px;display:flex;align-items:center;justify-content:center;transition:transform .15s;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Flash Sale Setup Modal -->
+<div class="modal-overlay" id="flashSaleModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box" style="max-width:420px;">
+    <div class="modal-header">
+      <span class="modal-title">Set Up Flash Sale</span>
+      <button class="modal-close" onclick="document.getElementById('flashSaleModal').classList.remove('open')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <input type="hidden" id="fsProdId"/>
+    <div style="font-size:.82rem;color:var(--text2);margin-bottom:14px;">Product: <strong id="fsProdName" style="color:var(--text);"></strong></div>
+    <div class="form-group">
+      <label>Current Price (becomes Previous Price)</label>
+      <input type="number" id="fsOriginalPrice" placeholder="e.g. 500" oninput="calcFlashSalePrice('pct')" style="font-weight:700;font-size:1rem;"/>
+    </div>
+    <div class="two-col">
+      <div class="form-group">
+        <label>Discount %</label>
+        <input type="number" id="fsDiscountPct" placeholder="e.g. 20" min="1" max="90" oninput="calcFlashSalePrice('pct')" style="font-size:1rem;font-weight:700;color:var(--error);"/>
+      </div>
+      <div class="form-group">
+        <label>Flash Sale Price</label>
+        <input type="number" id="fsFlashPrice" placeholder="e.g. 400" oninput="calcFlashSalePrice('price')" style="font-size:1rem;font-weight:700;color:var(--primary);"/>
+      </div>
+    </div>
+    <div id="fsCalcNote" style="font-size:.78rem;color:var(--primary);margin-bottom:12px;font-weight:600;min-height:18px;"></div>
+    <div class="form-group">
+      <label>Flash Sale Ends</label>
+      <input type="datetime-local" id="fsEndTime"/>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button class="btn btn-outline" onclick="document.getElementById('flashSaleModal').classList.remove('open')">Cancel</button>
+      <button class="btn btn-gold" onclick="submitFlashSale()" id="fsSubmitBtn">Start Flash Sale</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT PRODUCT MODAL -->
+<div class="modal-overlay" id="editProductModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">Edit Product</span>
+      <button class="modal-close" onclick="closeEditModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <input type="hidden" id="editProdId"/>
+    <div class="form-group"><label>Product Name</label><input type="text" id="editPName"/></div>
+    <div class="two-col">
+      <div class="form-group"><label>Price (<span class="curr-label">SLL</span>)</label><input type="number" id="editPPrice"/></div>
+      <div class="form-group"><label>Previous Price</label><input type="number" id="editPPrevPrice"/></div>
+    </div>
+    <div class="two-col">
+      <div class="form-group"><label>Stock</label><input type="number" id="editPStock"/></div>
+      <div class="form-group"><label>Shipping Fee</label><input type="number" id="editPShipping"/></div>
+    </div>
+    <div class="form-group"><label>Description</label><textarea id="editPDesc" style="min-height:80px;"></textarea></div>
+    <div class="form-group">
+      <label>Main Photo URL</label>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="url" id="editPPhoto" placeholder="https://..." style="flex:1;"/>
+        <input type="file" id="editPhotoInput" accept="image/*" style="display:none;" onchange="editUploadPhoto(this)"/>
+        <button type="button" onclick="document.getElementById('editPhotoInput').click()" style="white-space:nowrap;padding:9px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);cursor:pointer;font-size:.8rem;flex-shrink:0;">Upload</button>
+      </div>
+      <div id="editPhotoStatus" style="font-size:.75rem;margin-top:4px;"></div>
+      <div id="editPhotoPreview" style="margin-top:8px;width:80px;height:80px;border-radius:10px;overflow:hidden;display:none;border:1px solid var(--border);">
+        <img id="editPhotoPreviewImg" style="width:100%;height:100%;object-fit:cover;" alt=""/>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-gold" onclick="saveEditProduct()" id="editSaveBtn">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg id="toastIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg"></span>
+</div>
+
+<!-- ============================================================ POLICY OVERLAYS ============================================================ -->
+
+<!-- SELLER TERMS -->
+<div class="policy-overlay" id="pol-seller-terms">
+  <div class="policy-page">
+    <div class="policy-page-header">
+      <button class="policy-back-btn" onclick="closePolicy('seller-terms')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Close
+      </button>
+      <div class="policy-page-title">Seller Terms &amp; Conditions</div>
+    </div>
+    <div class="policy-body">
+      <h2>Seller Terms &amp; Conditions</h2>
+      <p>Last updated: June 2026. These terms govern your use of the Zmafrdeal Seller Portal.</p>
+
+      <div class="policy-section">
+        <h3>1. Eligibility</h3>
+        <p>You must be 18 years or older to register as a seller. By registering, you confirm that you have the legal right to sell the products you list. Zmafrdeal reserves the right to reject any application at its discretion.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3>2. Seller Responsibilities</h3>
+        <ul>
+          <li>Provide accurate and truthful product descriptions, photos, and pricing.</li>
+          <li>Maintain sufficient stock levels for all listed products.</li>
+          <li>Fulfill orders promptly and communicate clearly with buyers.</li>
+          <li>Keep your store information up to date, including contact details.</li>
+          <li>Respond to buyer inquiries within 48 hours of receiving them.</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h3>3. Commission &amp; Payments</h3>
+        <p>Zmafrdeal charges a 10% commission on every completed sale. This is deducted from your earnings before payout. You keep 90% of the sale price. There are no registration fees, no monthly fees, and no hidden charges. Payouts are processed on request to your registered mobile money or bank account.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3>4. Product Approval</h3>
+        <p>All products are reviewed by our admin team within 24 hours of submission. Products that do not meet our quality standards, contain prohibited items, or have misleading descriptions will be rejected. Sellers will be notified of rejections with the reason provided.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3>5. Account Suspension</h3>
+        <p>Zmafrdeal may suspend or permanently close a seller account for repeated policy violations, selling prohibited items, fraudulent activity, or receiving excessive buyer complaints. Sellers will be given a warning before suspension where possible.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3>6. Disputes</h3>
+        <p>In the event of a dispute between a seller and buyer, Zmafrdeal will act as a neutral mediator. Sellers must cooperate with the dispute resolution process. Final decisions made by Zmafrdeal are binding.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RETURN POLICY -->
+<div class="policy-overlay" id="pol-return-policy">
+  <div class="policy-page">
+    <div class="policy-page-header">
+      <button class="policy-back-btn" onclick="closePolicy('return-policy')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Close
+      </button>
+      <div class="policy-page-title">Return &amp; Refund Policy</div>
+    </div>
+    <div class="policy-body">
+      <h2>Return &amp; Refund Policy</h2>
+      <p>Last updated: June 2026. This policy applies to all sellers and buyers on Zmafrdeal.</p>
+
+      <div class="policy-section">
+        <h3>1. Return Window</h3>
+        <p>Buyers may request a return within <strong>7 days</strong> of receiving their order. Sellers may choose to extend this to up to 14 days, which should be stated clearly in the product description. After the return window, no returns are guaranteed.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3>2. Valid Reasons for Return</h3>
+        <ul>
+          <li>The item received is significantly different from the product description or photos.</li>
+          <li>The item arrived damaged or defective through no fault of the buyer.</li>
+          <li>The wrong item was delivered.</li>
+          <li>The item is missing key accessories or components as described.</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h3>3. Non-Returnable Items</h3>
+        <ul>
+          <li>Items damaged by the buyer after delivery.</li>
+          <li>Perishable goods (food, cosmetics opened by the buyer).</li>
+          <li>Digital products or downloads once accessed.</li>
+          <li>Customised or personalised items made to order.</li>
+          <li>Items without original packaging when required.</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h3>4. Return Process</h3>
+        <ol>
+          <li>Buyer contacts the seller via WhatsApp or the messaging system.</li>
+          <li>Seller reviews the return request and responds within 48 hours.</li>
+          <li>If agreed, the seller arranges item collection or instructs the buyer to send it back.</li>
+          <li>Once the item is received and inspected, the refund is processed within 3–5 business days.</li>
+        </ol>
+      </div>
+
+      <div class="policy-section">
+        <h3>5. Refund Method</h3>
+        <p>Refunds are issued to the original payment method used by the buyer — either mobile money or credit/debit card. Shipping costs are refunded only if the return is due to seller error or a defective product.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3>6. Seller Obligations</h3>
+        <p>Sellers must honour valid return requests. Repeatedly refusing valid returns will result in account warnings or suspension. Zmafrdeal may mediate in disputed returns and has the final say in resolution.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMMISSION POLICY -->
+<div class="policy-overlay" id="pol-commission-policy">
+  <div class="policy-page">
+    <div class="policy-page-header">
+      <button class="policy-back-btn" onclick="closePolicy('commission-policy')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Close
+      </button>
+      <div class="policy-page-title">Commission Policy</div>
+    </div>
+    <div class="policy-body">
+      <h2>Commission Policy</h2>
+      <p>Last updated: June 2026. Zmafrdeal charges a simple, transparent commission on sales.</p>
+
+      <div class="policy-section">
+        <h3>1. Commission Rate</h3>
+        <p>Zmafrdeal charges a flat <strong>10% commission</strong> on every successfully completed sale. This is the only fee you pay as a seller. There are no setup fees, no monthly subscription fees, and no listing fees.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3>2. When Commission is Charged</h3>
+        <p>Commission is only deducted when a sale is marked as <strong>completed</strong> (order delivered and no return pending). Cancelled orders are not charged. If an order is refunded, the commission is reversed accordingly.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3>3. Payout Calculation</h3>
+        <p>Your payout for each sale = <strong>Sale Price × 90%</strong>. For example, if a buyer pays Le 100,000, you receive Le 90,000 and Zmafrdeal retains Le 10,000 as commission. Shipping fees collected from buyers are passed to you in full if you arranged the delivery.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3>4. Payout Schedule</h3>
+        <p>Payouts are processed on request. You can request a withdrawal from your seller dashboard at any time once your balance reaches the minimum threshold. Funds are transferred to your registered mobile money number or bank account within 1–3 business days.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3>5. Commission Adjustments</h3>
+        <p>Zmafrdeal reserves the right to adjust commission rates with 30 days' notice. Any changes will be communicated via email and in-app notification. Existing confirmed orders at the time of change will be processed at the original rate.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRIVACY POLICY -->
+<div class="policy-overlay" id="pol-privacy-policy">
+  <div class="policy-page">
+    <div class="policy-page-header">
+      <button class="policy-back-btn" onclick="closePolicy('privacy-policy')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Close
+      </button>
+      <div class="policy-page-title">Privacy Policy</div>
+    </div>
+    <div class="policy-body">
+      <h2>Privacy Policy</h2>
+      <p>Last updated: June 2026. We respect your privacy and are committed to protecting your personal data.</p>
+
+      <div class="policy-section">
+        <h3>1. Information We Collect</h3>
+        <ul>
+          <li>Name, email address, phone number, and business information during registration.</li>
+          <li>Transaction data including orders, payments, and earnings.</li>
+          <li>Usage data such as pages visited and features used in your seller dashboard.</li>
+          <li>Device and browser information for security and fraud prevention.</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h3>2. How We Use Your Information</h3>
+        <ul>
+          <li>To operate and improve the Zmafrdeal platform.</li>
+          <li>To process and fulfil orders and payments.</li>
+          <li>To send you notifications about orders and account activity.</li>
+          <li>To communicate important updates, policy changes, and support.</li>
+          <li>To detect and prevent fraudulent activity.</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h3>3. Data Sharing</h3>
+        <p>We do not sell your personal data. We share your information only where necessary: with payment processors to process transactions, with buyers to fulfil their orders (name and contact for delivery), and with law enforcement if legally required.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3>4. Data Security</h3>
+        <p>Your data is stored securely using industry-standard encryption. We use Supabase infrastructure with row-level security. Passwords are hashed and never stored in plain text. We regularly review our security practices.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3>5. Your Rights</h3>
+        <ul>
+          <li>Access your personal data at any time from your profile dashboard.</li>
+          <li>Request correction of inaccurate data by contacting support.</li>
+          <li>Request deletion of your account and associated data.</li>
+          <li>Opt out of marketing communications at any time.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROHIBITED ITEMS -->
+<div class="policy-overlay" id="pol-prohibited-items">
+  <div class="policy-page">
+    <div class="policy-page-header">
+      <button class="policy-back-btn" onclick="closePolicy('prohibited-items')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Close
+      </button>
+      <div class="policy-page-title">Prohibited Items</div>
+    </div>
+    <div class="policy-body">
+      <h2>Prohibited Items Policy</h2>
+      <p>Last updated: June 2026. The following items are not permitted on Zmafrdeal under any circumstances.</p>
+
+      <div class="policy-section">
+        <h3>Absolutely Prohibited</h3>
+        <ul>
+          <li>Weapons, firearms, ammunition, or explosive devices.</li>
+          <li>Illegal drugs, narcotics, or controlled substances.</li>
+          <li>Counterfeit or stolen goods of any kind.</li>
+          <li>Adult content or sexually explicit materials.</li>
+          <li>Human organs, body parts, or remains.</li>
+          <li>Animals (live or dead) without proper documentation.</li>
+          <li>Hazardous chemicals, poisons, or biological materials.</li>
+          <li>Items that infringe on intellectual property rights (fake branded goods).</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h3>Restricted Items (require approval)</h3>
+        <ul>
+          <li>Pharmaceutical products (must include proper licensing).</li>
+          <li>Alcohol and tobacco products (subject to regional regulations).</li>
+          <li>Second-hand electronics (must be clearly described as used).</li>
+          <li>Food products (must comply with health and safety standards).</li>
+          <li>Agricultural products (must meet import/export regulations).</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h3>Consequences of Violations</h3>
+        <p>Listing prohibited items will result in immediate product removal, a warning to your account, and potentially permanent account suspension for repeat violations. Zmafrdeal cooperates with relevant authorities for serious violations including illegal goods. All decisions are final.</p>
+      </div>
+
+      <div class="policy-section">
+        <h3>Reporting Violations</h3>
+        <p>If you see a product listed on Zmafrdeal that you believe violates this policy, please contact our admin team immediately via WhatsApp or the seller support channel. We review all reports within 24 hours and take appropriate action.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOM CONFIRM DIALOG -->
+<div id="zmConfirmOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9990;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s ease;">
+  <div id="zmConfirmBox" style="background:#1e1e2e;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:340px;transform:scale(.94) translateY(14px);transition:transform .22s cubic-bezier(.34,1.56,.64,1);box-shadow:0 24px 60px rgba(0,0,0,.5);position:relative;border:1px solid rgba(255,255,255,.08);">
+    <button onclick="zmConfirmResolve(false)" aria-label="Close" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,.08);border:none;cursor:pointer;color:#aaa;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:1.3rem;line-height:1;">×</button>
+    <div id="zmConfirmTitle" style="font-size:1.05rem;font-weight:700;margin-bottom:8px;padding-right:30px;color:#fff;"></div>
+    <div id="zmConfirmMsg" style="font-size:.88rem;color:#aaa;line-height:1.55;margin-bottom:22px;"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button onclick="zmConfirmResolve(false)" style="padding:10px 20px;border:1px solid rgba(255,255,255,.15);background:transparent;border-radius:10px;font-size:.88rem;cursor:pointer;color:#ccc;font-weight:500;">Cancel</button>
+      <button id="zmConfirmOkBtn" onclick="zmConfirmResolve(true)" style="padding:10px 22px;background:#f68b1e;border:none;border-radius:10px;font-size:.88rem;font-weight:600;cursor:pointer;color:#fff;min-width:90px;">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'https://products-store-3g52.onrender.com';
+
+window.ZM = (function() {
+  try { const s = JSON.parse(localStorage.getItem('zm_settings') || '{}'); if (s.code) return s; } catch(e) {}
+  return { code: 'SLL', symbol: 'Le', name: 'Sierra Leonean Leone', country: 'Sierra Leone' };
+})();
+
+async function fetchStoreSettings() {
+  try {
+    const res = await fetch(API + '/api/settings');
+    const data = await res.json();
+    if (data.success && data.data) {
+      const s = data.data;
+      window.ZM = { code: s.default_currency || 'SLL', symbol: s.currency_symbol || 'Le', name: s.currency_name || 'Sierra Leonean Leone', country: s.default_country || 'Sierra Leone' };
+      localStorage.setItem('zm_settings', JSON.stringify({ ...window.ZM, ts: Date.now() }));
+      document.querySelectorAll('.curr-label').forEach(el => { el.textContent = window.ZM.code; });
+    }
+  } catch(e) {}
+}
+
+window.addEventListener('storage', e => {
+  if (e.key === 'zm_settings' && e.newValue) {
+    try {
+      const s = JSON.parse(e.newValue);
+      if (s.code) { window.ZM = s; document.querySelectorAll('.curr-label').forEach(el => { el.textContent = s.code; }); }
+    } catch(_) {}
+  }
+});
+
+fetchStoreSettings();
+
+let token = localStorage.getItem('zm_token') || null;
+let sellerData = null;
+let allOrders = [];
+
+function goHome() { window.location.href = 'index.html'; }
+
+// ==================== TOAST ====================
+function showToast(msg, type = 'success', duration = 3500) {
+  const t = document.getElementById('toast');
+  const ic = document.getElementById('toastIcon');
+  t.className = 'toast ' + type;
+  document.getElementById('toastMsg').textContent = msg;
+  if (type === 'error') ic.innerHTML = '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>';
+  else if (type === 'warning') ic.innerHTML = '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>';
+  else ic.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+// ==================== AUTH TABS ====================
+function showAuth(mode) {
+  const loginForm = document.getElementById('sellerLoginForm');
+  const regForm = document.getElementById('sellerRegisterForm');
+  const atLogin = document.getElementById('atLogin');
+  const atRegister = document.getElementById('atRegister');
+  if (mode === 'login') {
+    loginForm.style.display = 'block'; regForm.style.display = 'none';
+    atLogin.classList.add('active'); atRegister.classList.remove('active');
+  } else {
+    loginForm.style.display = 'none'; regForm.style.display = 'block';
+    atLogin.classList.remove('active'); atRegister.classList.add('active');
+  }
+  document.getElementById('authSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ==================== PASSWORD TOGGLE ====================
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+// ==================== MULTI STEP REG ====================
+function nextRegStep(current) {
+  const err = current === 1 ? validateStep1() : validateStep2();
+  if (err) { showToast(err, 'error'); return; }
+  if (current === 2) populateReview();
+  const next = current + 1;
+  document.getElementById('regStep' + current).classList.remove('active');
+  document.getElementById('regStep' + next).classList.add('active');
+  document.getElementById('step' + current + 'Dot').classList.remove('active');
+  document.getElementById('step' + current + 'Dot').classList.add('done');
+  document.getElementById('step' + next + 'Dot').classList.add('active');
+}
+
+function prevRegStep(current) {
+  const prev = current - 1;
+  document.getElementById('regStep' + current).classList.remove('active');
+  document.getElementById('regStep' + prev).classList.add('active');
+  document.getElementById('step' + current + 'Dot').classList.remove('active');
+  document.getElementById('step' + prev + 'Dot').classList.remove('done');
+  document.getElementById('step' + prev + 'Dot').classList.add('active');
+}
+
+function validateStep1() {
+  const name = document.getElementById('srName').value.trim();
+  const email = document.getElementById('srEmail').value.trim();
+  const pw = document.getElementById('srPassword').value;
+  const cpw = document.getElementById('srConfirmPw').value;
+  const phone = document.getElementById('srPhone').value.trim();
+  if (!name) return 'Please enter your full name';
+  if (!email || !/\S+@\S+\.\S+/.test(email)) return 'Please enter a valid email address';
+  if (!pw || pw.length < 8) return 'Password must be at least 8 characters';
+  if (pw !== cpw) return 'Passwords do not match';
+  if (!phone) return 'Please enter your phone number';
+  return null;
+}
+
+function validateStep2() {
+  const biz = document.getElementById('srBusiness').value.trim();
+  const btype = document.getElementById('srBusinessType').value;
+  const desc = document.getElementById('srDesc').value.trim();
+  if (!biz) return 'Please enter your business name';
+  if (!btype) return 'Please select your business type';
+  if (!desc || desc.length < 30) return 'Business description is too short (min 30 characters)';
+  return null;
+}
+
+function populateReview() {
+  document.getElementById('rv-name').textContent = document.getElementById('srName').value || '—';
+  document.getElementById('rv-email').textContent = document.getElementById('srEmail').value || '—';
+  document.getElementById('rv-phone').textContent = document.getElementById('srPhone').value || '—';
+  document.getElementById('rv-country').textContent = document.getElementById('srCountry').value || '—';
+  document.getElementById('rv-biz').textContent = document.getElementById('srBusiness').value || '—';
+  document.getElementById('rv-btype').textContent = document.getElementById('srBusinessType').value || '—';
+  document.getElementById('rv-addr').textContent = document.getElementById('srAddress').value || 'Not provided';
+}
+
+// ==================== SELLER LOGIN ====================
+async function doSellerLogin() {
+  const email = document.getElementById('slEmail').value.trim();
+  const pw = document.getElementById('slPassword').value;
+  if (!email || !pw) { showToast('Enter email and password', 'error'); return; }
+  const btn = document.getElementById('slBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Signing in...';
+  try {
+    const res = await fetch(API + '/api/sellers/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password: pw }) });
+    const data = await res.json();
+    if (!data.success) { showToast(data.error, 'error'); btn.disabled = false; btn.textContent = 'Sign In to Dashboard'; return; }
+    token = data.data.session.access_token;
+    localStorage.setItem('zm_token', token);
+    sellerData = data.data;
+    showDashboard(data.data);
+  } catch (e) { showToast('Connection error — check your internet', 'error'); btn.disabled = false; btn.textContent = 'Sign In to Dashboard'; }
+}
+
+// ==================== SELLER REGISTER ====================
+async function doSellerRegister() {
+  const btn = document.getElementById('srBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Submitting...';
+  try {
+    const res = await fetch(API + '/api/sellers/apply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        full_name: document.getElementById('srName').value.trim(),
+        email: document.getElementById('srEmail').value.trim(),
+        password: document.getElementById('srPassword').value,
+        business_name: document.getElementById('srBusiness').value.trim(),
+        business_type: document.getElementById('srBusinessType').value,
+        phone: document.getElementById('srPhone').value.trim(),
+        country: document.getElementById('srCountry').value,
+        id_number: document.getElementById('srIdNum').value,
+        address: document.getElementById('srAddress').value,
+        description: document.getElementById('srDesc').value.trim()
+      })
+    });
+    const data = await res.json();
+    if (!data.success) { showToast(data.error, 'error'); btn.disabled = false; btn.textContent = 'Submit Application'; return; }
+    showToast('Application submitted! Admin will review within 24 hours.');
+    btn.textContent = 'Application Submitted';
+    document.getElementById('srBtn').parentElement.innerHTML = `
+      <div style="text-align:center;padding:20px 0;">
+        <div style="width:52px;height:52px;background:rgba(82,196,26,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div style="font-size:1.05rem;font-weight:700;margin-bottom:8px;">Application Submitted!</div>
+        <div style="font-size:.85rem;color:var(--text2);margin-bottom:20px;">You'll receive an email within 24 hours once approved.</div>
+        <button class="btn btn-gold" style="width:auto;padding:12px 28px;" onclick="showAuth('login')">Go to Login</button>
+      </div>`;
+  } catch (e) { showToast('Connection error', 'error'); btn.disabled = false; btn.textContent = 'Submit Application'; }
+}
+
+// ==================== DASHBOARD ====================
+function switchDash(tab) {
+  document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+  const map = { products: 0, addProduct: 1, orders: 2, flashSale: 3, analytics: 4, notifications: 5, reviews: 6, profile: 7, messages: 8 };
+  const key = tab.charAt(0).toUpperCase() + tab.slice(1);
+  document.getElementById('dash' + key).classList.add('active');
+  document.querySelectorAll('.dash-tab')[map[tab]]?.classList.add('active');
+  if (tab === 'products') loadDashboardProducts();
+  if (tab === 'orders') loadOrders();
+  if (tab === 'analytics') loadAnalytics();
+  if (tab === 'flashSale') loadFlashSale();
+  if (tab === 'notifications') loadSellerNotifications();
+  if (tab === 'reviews') loadSellerReviews();
+  if (tab === 'messages') loadSellerMessages();
+  document.getElementById('editProductModal').classList.remove('open');
+}
+
+function showDashboard(data) {
+  document.getElementById('sellerLanding').style.display = 'none';
+  document.getElementById('sellerDashboard').style.display = 'block';
+  document.getElementById('navLogout').style.display = 'block';
+  const pName = data.profile?.full_name || data.seller?.full_name || 'Seller';
+  const bName = data.seller?.business_name || '';
+  document.getElementById('sellerName').textContent = pName;
+  if (bName) document.getElementById('sellerStoreName').textContent = bName;
+  document.getElementById('profileAvatar').textContent = pName.charAt(0).toUpperCase();
+  const status = data.seller?.status;
+  const badge = document.getElementById('sellerStatusBadge');
+  if (status === 'pending') badge.innerHTML = '<div class="status-bar">Application Pending — Admin is reviewing your application</div>';
+  else if (status === 'rejected') badge.innerHTML = '<div class="status-bar" style="border-color:var(--error);color:var(--error);background:rgba(255,77,79,0.08);">Application Rejected — Contact support</div>';
+  const prods = data.products || [];
+  const orders = data.orders || [];
+  allOrders = orders;
+  document.getElementById('statProducts').textContent = prods.length;
+  document.getElementById('statOrders').textContent = orders.length;
+  document.getElementById('statRevenue').textContent = Math.round(data.total_revenue || 0).toLocaleString();
+  document.getElementById('statPending').textContent = orders.filter(o => o.status === 'pending').length;
+  document.getElementById('statViews').textContent = prods.reduce((s, p) => s + (p.views_count || 0), 0).toLocaleString();
+  if (data.seller) {
+    document.getElementById('editName').value = pName;
+    document.getElementById('editBusiness').value = data.seller.business_name || '';
+    document.getElementById('editPhone').value = data.seller.phone || '';
+    document.getElementById('editWhatsApp').value = data.seller.whatsapp || '';
+    document.getElementById('editAddress').value = data.seller.address || '';
+    document.getElementById('editDesc').value = data.seller.description || '';
+    const ctry = document.getElementById('editCountry');
+    if (data.seller.country) Array.from(ctry.options).forEach(o => { if (o.value === data.seller.country) o.selected = true; });
+    const btype = document.getElementById('editBizType');
+    if (data.seller.business_type) Array.from(btype.options).forEach(o => { if (o.value === data.seller.business_type) o.selected = true; });
+  }
+  loadCategories();
+  loadDashboardProducts();
+}
+
+// ==================== CATEGORIES ====================
+async function loadCategories() {
+  try {
+    const res = await fetch(API + '/api/categories');
+    const data = await res.json();
+    if (data.success) {
+      const sel = document.getElementById('pCategory');
+      if (sel.options.length <= 1) data.data.forEach(c => sel.innerHTML += `<option value="${c.name}">${c.name}</option>`);
+    }
+  } catch (e) {}
+}
+
+// ==================== PRODUCTS LIST ====================
+async function loadDashboardProducts() {
+  if (!token) return;
+  try {
+    const res = await fetch(API + '/api/sellers/dashboard', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    if (!data.success) return;
+    const prods = data.data.products || [];
+    const list = document.getElementById('productsList');
+    const noP = document.getElementById('noProducts');
+    document.getElementById('prodListCount').textContent = prods.length + ' product' + (prods.length !== 1 ? 's' : '');
+    if (!prods.length) { list.innerHTML = ''; noP.style.display = 'block'; return; }
+    noP.style.display = 'none';
+    list.innerHTML = prods.map(p => `
+      <div class="prod-card">
+        <img class="prod-card-img" src="${p.home_photo || ''}" alt="" onerror="this.onerror=null;this.alt='';this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27130%27 viewBox=%270 0 200 130%27%3E%3Crect width=%27200%27 height=%27130%27 fill=%27%232e2e50%27/%3E%3Crect x=%2770%27 y=%2735%27 width=%2760%27 height=%2750%27 rx=%274%27 stroke=%27%23c8a96e%27 stroke-width=%272%27 fill=%27none%27/%3E%3Ccircle cx=%2787%27 cy=%2752%27 r=%276%27 stroke=%27%23c8a96e%27 stroke-width=%272%27 fill=%27none%27/%3E%3Cpolyline points=%2770,85 90,63 105,75 120,55 130,85%27 stroke=%27%23c8a96e%27 stroke-width=%272%27 fill=%27none%27/%3E%3C/svg%3E';this.style.objectFit='cover';"/>
+        <div class="prod-card-body">
+          <div class="prod-card-name" title="${p.name}">${p.name}</div>
+          <div class="prod-card-cat">${p.category || ''}</div>
+          <div class="prod-card-footer">
+            <div class="prod-card-price">${window.ZM.code} ${Number(p.price).toLocaleString()}</div>
+            <span class="badge-status badge-${p.status === 'active' ? 'active' : p.status === 'pending_approval' ? 'pending' : 'rejected'}">${p.status === 'pending_approval' ? 'Pending' : p.status}</span>
+          </div>
+          <div style="font-size:.76rem;color:var(--text2);">Stock: ${p.stock_available} &nbsp;|&nbsp; Sales: ${p.sales_count || 0} &nbsp;|&nbsp; Views: ${p.views_count || 0}</div>
+          <div class="prod-card-actions">
+            <button class="prod-action-btn" onclick="openEditModal('${p.id}')">Edit</button>
+            <button class="prod-action-btn prod-action-del" onclick="deleteProduct('${p.id}','${p.name}')">Delete</button>
+          </div>
+        </div>
+      </div>`).join('');
+  } catch (e) { showToast('Failed to load products', 'error'); }
+}
+
+async function deleteProduct(id, name) {
+  zmConfirm(`Delete "${name}"? This cannot be undone.`, 'Delete Product', async () => {
+    try {
+      const res = await fetch(API + '/api/products/' + id, { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } });
+      const data = await res.json();
+      if (data.success) { showToast('Product deleted'); loadDashboardProducts(); }
+      else showToast(data.error || 'Could not delete', 'error');
+    } catch (e) { showToast('Connection error', 'error'); }
+  }, null, 'Delete', true);
+}
+
+// ==================== EDIT PRODUCT MODAL ====================
+async function openEditModal(id) {
+  try {
+    const res = await fetch(API + '/api/products/' + id, { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    if (!data.success) { showToast('Could not load product', 'error'); return; }
+    const p = data.data;
+    document.getElementById('editProdId').value = id;
+    document.getElementById('editPName').value = p.name || '';
+    document.getElementById('editPPrice').value = p.price || '';
+    document.getElementById('editPPrevPrice').value = p.previous_price || '';
+    document.getElementById('editPStock').value = p.stock_available || '';
+    document.getElementById('editPShipping').value = p.shipping_fee || '';
+    document.getElementById('editPDesc').value = p.description || '';
+    document.getElementById('editPPhoto').value = p.home_photo || '';
+    document.getElementById('editProductModal').classList.add('open');
+  } catch (e) {
+    document.getElementById('editProdId').value = id;
+    document.getElementById('editProductModal').classList.add('open');
+  }
+}
+
+function closeEditModal() { document.getElementById('editProductModal').classList.remove('open'); }
+
+async function saveEditProduct() {
+  const id = document.getElementById('editProdId').value;
+  const btn = document.getElementById('editSaveBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    const res = await fetch(API + '/api/products/' + id, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({
+        name: document.getElementById('editPName').value.trim(),
+        price: parseFloat(document.getElementById('editPPrice').value) || 0,
+        previous_price: parseFloat(document.getElementById('editPPrevPrice').value) || null,
+        stock_available: parseInt(document.getElementById('editPStock').value) || 0,
+        shipping_fee: parseFloat(document.getElementById('editPShipping').value) || 0,
+        description: document.getElementById('editPDesc').value.trim(),
+        home_photo: document.getElementById('editPPhoto').value.trim()
+      })
+    });
+    const data = await res.json();
+    if (data.success) { showToast('Product updated!'); closeEditModal(); loadDashboardProducts(); }
+    else showToast(data.error, 'error');
+  } catch (e) { showToast('Connection error', 'error'); }
+  btn.disabled = false; btn.textContent = 'Save Changes';
+}
+
+// ==================== POST PRODUCT ====================
+async function doPostProduct() {
+  const name = document.getElementById('pName').value.trim();
+  const cat = document.getElementById('pCategory').value;
+  const desc = document.getElementById('pDesc').value.trim();
+  const price = document.getElementById('pPrice').value;
+  const stock = document.getElementById('pStock').value;
+  const homePhoto = document.getElementById('pHomePhoto').value.trim();
+  if (!name || !cat || !desc || !price || !stock || !homePhoto) {
+    showToast('Fill all required fields (name, category, description, price, stock, main photo)', 'error'); return;
+  }
+  const scrollPhotos = document.getElementById('pScrollPhotos').value.split(',').map(s => s.trim()).filter(Boolean);
+  const morePhotos = document.getElementById('pMorePhotos').value.split(',').map(s => s.trim()).filter(Boolean);
+  const colors = document.getElementById('pColors').value.split(',').map(s => s.trim()).filter(Boolean);
+  const sizes = document.getElementById('pSizes').value.split(',').map(s => s.trim()).filter(Boolean);
+  const btn = document.getElementById('postBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Posting product...';
+  try {
+    const res = await fetch(API + '/api/products', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({
+        name, category: cat, description: desc,
+        brand: document.getElementById('pBrand').value,
+        specifications: document.getElementById('pSpecs').value,
+        how_to_use: document.getElementById('pHowToUse').value,
+        price: parseFloat(price),
+        previous_price: parseFloat(document.getElementById('pPrevPrice').value) || null,
+        stock_available: parseInt(stock),
+        shipping_fee: parseFloat(document.getElementById('pShipping').value) || 0,
+        home_photo: homePhoto,
+        auto_scroll_photos: scrollPhotos, more_photos: morePhotos, colors, sizes
+      })
+    });
+    const data = await res.json();
+    if (!data.success) { showToast(data.error, 'error'); btn.disabled = false; btn.textContent = 'Submit Product for Approval'; return; }
+    showToast('Product submitted for approval!');
+    btn.disabled = false; btn.textContent = 'Submit Product for Approval';
+    ['pName','pBrand','pDesc','pSpecs','pHowToUse','pPrice','pPrevPrice','pStock','pShipping','pColors','pSizes','pHomePhoto','pScrollPhotos','pMorePhotos'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    document.getElementById('sGalleryGrid').innerHTML = '';
+    document.getElementById('sMoreGrid').innerHTML = '';
+    document.getElementById('sHomePreview').innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
+    switchDash('products');
+  } catch (e) { showToast('Connection error', 'error'); btn.disabled = false; btn.textContent = 'Submit Product for Approval'; }
+}
+
+// ==================== ORDERS ====================
+async function loadOrders() {
+  if (!token) return;
+  document.getElementById('ordersContainer').innerHTML = '<div style="text-align:center;padding:32px;color:var(--text2);">Loading orders...</div>';
+  document.getElementById('noOrders').style.display = 'none';
+  try {
+    const res = await fetch(API + '/api/sellers/dashboard', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || 'Failed');
+    const raw = data.data?.orders || [];
+    allOrders = raw.map(o => {
+      let d = o.delivery_info || {};
+      if (typeof d === 'string') { try { d = JSON.parse(d); } catch(e) { d = {}; } }
+      return { ...o, _delivery: d };
+    });
+    renderOrders(allOrders);
+  } catch (e) {
+    document.getElementById('ordersContainer').innerHTML = `<div style="text-align:center;padding:32px;color:var(--error);">Failed to load orders. <button onclick="loadOrders()" style="color:var(--primary);background:none;border:none;cursor:pointer;text-decoration:underline;">Retry</button></div>`;
+  }
+}
+
+function filterOrders(status, btn) {
+  document.querySelectorAll('.ofilter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = status === 'all' ? allOrders : allOrders.filter(o => o.status === status);
+  renderOrders(filtered);
+}
+
+function renderOrders(orders) {
+  const container = document.getElementById('ordersContainer');
+  const noO = document.getElementById('noOrders');
+  if (!orders.length) { container.innerHTML = ''; noO.style.display = 'block'; return; }
+  noO.style.display = 'none';
+  container.innerHTML = orders.map(o => {
+    const items = typeof o.items === 'string' ? JSON.parse(o.items) : (o.items || []);
+    const statusMap = { pending: 'pending', confirmed: 'confirmed', shipped: 'shipped', completed: 'confirmed', cancelled: 'cancelled' };
+    const statusCls = statusMap[o.status] || 'pending';
+    const actions = buildOrderActions(o);
+    return `<div class="order-card">
+      <div class="order-card-head" onclick="toggleOrder(this)">
+        <div>
+          <div class="order-id">Order #${String(o.id).slice(0, 8).toUpperCase()}</div>
+          <div class="order-meta">${new Date(o.created_at).toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'})} · ${Array.isArray(items) ? items.length : 0} item(s) · ${o._delivery?.full_name || 'Customer'}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="order-amount">${window.ZM.code} ${Number(o.total || 0).toLocaleString()}</div>
+          <span class="badge-status badge-${statusCls}">${o.status}</span>
+        </div>
+      </div>
+      <div class="order-body">
+        ${Array.isArray(items) && items.length ? `<div style="margin-bottom:10px;">${items.map(it => `<div style="display:flex;justify-content:space-between;font-size:.83rem;padding:4px 0;border-bottom:1px solid var(--border)"><span>${it.name || 'Item'} x${it.qty || 1}</span><span style="color:var(--primary);">${window.ZM.code} ${Number((it.price || 0) * (it.qty || 1)).toLocaleString()}</span></div>`).join('')}</div>` : ''}
+        <div class="order-detail-row"><span style="color:var(--text2);">Phone</span><span>${o._delivery?.phone || '—'}</span></div>
+        <div class="order-detail-row"><span style="color:var(--text2);">Delivery Address</span><span>${o._delivery?.address || o._delivery?.street || '—'}</span></div>
+        <div class="order-detail-row"><span style="color:var(--text2);">City</span><span>${o._delivery?.city || '—'}</span></div>
+        <div class="order-detail-row"><span style="color:var(--text2);">Payment</span><span>${(o.payment_method||'N/A').replace(/_/g,' ')}</span></div>
+        ${o._delivery?.remark || o._delivery?.notes ? `<div class="order-detail-row"><span style="color:var(--text2);">Note</span><span>${o._delivery.remark||o._delivery.notes}</span></div>` : ''}
+        <div class="order-actions">${actions}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function buildOrderActions(o) {
+  let btns = '';
+  if (o.status === 'pending') {
+    btns += `<button class="oact-btn oact-confirm" onclick="updateOrderStatus('${o.id}','confirmed')">Confirm Order</button>`;
+    btns += `<button class="oact-btn oact-cancel" onclick="updateOrderStatus('${o.id}','cancelled')">Cancel</button>`;
+  }
+  if (o.status === 'confirmed') {
+    btns += `<button class="oact-btn oact-ship" onclick="updateOrderStatus('${o.id}','shipped')">Mark as Shipped</button>`;
+    btns += `<button class="oact-btn oact-cancel" onclick="updateOrderStatus('${o.id}','cancelled')">Cancel</button>`;
+  }
+  if (o.status === 'shipped') {
+    btns += `<button class="oact-btn oact-confirm" onclick="updateOrderStatus('${o.id}','completed')">Mark as Delivered</button>`;
+  }
+  if (o._delivery?.phone) {
+    const ph = (o._delivery.phone || '').replace(/\s+/g, '');
+    btns += `<a href="https://wa.me/${ph}?text=Hi%2C+regarding+your+order+%23${String(o.id).slice(0,8).toUpperCase()}" target="_blank" class="oact-btn" style="text-decoration:none;background:rgba(37,211,102,.12);border-color:#25d366;color:#25d366;">WhatsApp</a>`;
+  }
+  return btns;
+}
+
+function toggleOrder(head) {
+  const body = head.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+async function updateOrderStatus(id, status) {
+  try {
+    const res = await fetch(API + '/api/seller/orders/' + id + '/status', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({ status })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Order updated to ' + status);
+      const o = allOrders.find(x => x.id === id);
+      if (o) o.status = status;
+      const active = document.querySelector('.ofilter.active');
+      const filter = active?.textContent?.toLowerCase().trim();
+      filterOrders(filter === 'all orders' ? 'all' : filter || 'all', active || document.querySelector('.ofilter'));
+    } else showToast(data.error || 'Update failed', 'error');
+  } catch (e) { showToast('Connection error', 'error'); }
+}
+
+// ==================== ANALYTICS ====================
+function loadAnalytics() {
+  if (!sellerData) return;
+  const orders = sellerData.orders || allOrders || [];
+  const products = sellerData.products || [];
+  const now = new Date();
+  const months = Array.from({ length: 6 }, (_, i) => {
+    const d = new Date(now.getFullYear(), now.getMonth() - 5 + i, 1);
+    return { label: d.toLocaleString('default', { month: 'short' }), month: d.getMonth(), year: d.getFullYear() };
+  });
+  const revenues = months.map(m =>
+    orders.filter(o => { const d = new Date(o.created_at); return d.getMonth() === m.month && d.getFullYear() === m.year && o.status !== 'cancelled'; })
+      .reduce((s, o) => s + Number(o.total || 0), 0)
+  );
+  const maxRev = Math.max(...revenues, 1);
+  const chart = document.getElementById('revenueChart');
+  chart.innerHTML = revenues.map((r, i) => `
+    <div class="bar-col">
+      <div class="bar-fill" style="height:${Math.round((r / maxRev) * 100)}%;"></div>
+      <div class="bar-label">${months[i].label}</div>
+    </div>`).join('');
+  const topProds = [...products].sort((a, b) => (b.sales_count || 0) - (a.sales_count || 0)).slice(0, 5);
+  document.getElementById('topProductsList').innerHTML = topProds.length
+    ? topProds.map((p, i) => `<div class="top-product-row"><div class="top-prod-rank">${i + 1}</div><div class="top-prod-name">${p.name}</div><div class="top-prod-sales">${p.sales_count || 0} sales</div></div>`).join('')
+    : '<div style="color:var(--text2);font-size:.85rem;">No sales data yet.</div>';
+  const statusCounts = ['pending','confirmed','shipped','completed','cancelled'].map(s => ({ s, count: orders.filter(o => o.status === s).length }));
+  document.getElementById('orderSummaryChart').innerHTML = statusCounts.map(x => `
+    <div style="display:flex;justify-content:space-between;font-size:.82rem;padding:5px 0;border-bottom:1px solid var(--border);">
+      <span style="text-transform:capitalize;">${x.s}</span>
+      <span style="font-weight:700;color:var(--primary);">${x.count}</span>
+    </div>`).join('');
+  const totalRev = orders.filter(o => o.status !== 'cancelled').reduce((s, o) => s + Number(o.total || 0), 0);
+  document.getElementById('perfStats').innerHTML = [
+    { l: 'Total Revenue', v: window.ZM.code + ' ' + Math.round(totalRev).toLocaleString() },
+    { l: 'Total Orders', v: orders.length },
+    { l: 'Products Listed', v: products.length },
+    { l: 'Total Views', v: products.reduce((s, p) => s + (p.views_count || 0), 0).toLocaleString() },
+  ].map(x => `<div class="stat-card"><div class="stat-n">${x.v}</div><div class="stat-l">${x.l}</div></div>`).join('');
+}
+
+// ==================== PROFILE ====================
+async function saveProfile() {
+  const btn = document.getElementById('saveProfileBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    await fetch(API + '/api/auth/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({ full_name: document.getElementById('editName').value.trim(), phone: document.getElementById('editPhone').value, country: document.getElementById('editCountry').value })
+    });
+    await fetch(API + '/api/sellers/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({
+        business_name: document.getElementById('editBusiness').value.trim(),
+        phone: document.getElementById('editPhone').value,
+        address: document.getElementById('editAddress').value,
+        description: document.getElementById('editDesc').value.trim(),
+        country: document.getElementById('editCountry').value,
+        business_type: document.getElementById('editBizType').value
+      })
+    });
+    const data = await (await fetch(API + '/api/sellers/profile', { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }, body: JSON.stringify({ business_name: document.getElementById('editBusiness').value.trim(), phone: document.getElementById('editPhone').value, address: document.getElementById('editAddress').value, description: document.getElementById('editDesc').value.trim(), country: document.getElementById('editCountry').value, business_type: document.getElementById('editBizType').value }) })).json();
+    if (data.success) showToast('Profile saved!');
+    else showToast(data.error, 'error');
+  } catch (e) { showToast('Error saving profile', 'error'); }
+  btn.disabled = false; btn.textContent = 'Save Changes';
+}
+
+async function changePassword() {
+  const curr = document.getElementById('pwCurrent').value;
+  const nw = document.getElementById('pwNew').value;
+  const conf = document.getElementById('pwConfirm').value;
+  if (!curr || !nw) { showToast('Enter current and new password', 'error'); return; }
+  if (nw.length < 8) { showToast('New password must be at least 8 characters', 'error'); return; }
+  if (nw !== conf) { showToast('New passwords do not match', 'error'); return; }
+  const btn = document.getElementById('changePwBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    const res = await fetch(API + '/api/auth/change-password', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }, body: JSON.stringify({ current_password: curr, new_password: nw }) });
+    const data = await res.json();
+    if (data.success) { showToast('Password changed successfully!'); ['pwCurrent','pwNew','pwConfirm'].forEach(id => document.getElementById(id).value = ''); }
+    else showToast(data.error || 'Could not change password', 'error');
+  } catch (e) { showToast('Connection error', 'error'); }
+  btn.disabled = false; btn.textContent = 'Change Password';
+}
+
+function confirmDeactivate() {
+  zmConfirm('All your products will be hidden from buyers. You can reactivate by contacting support.', 'Deactivate Store', () => {
+    showToast('Please contact support@zmafrdeal.com to deactivate your store.', 'warning');
+  }, null, 'Deactivate', true);
+}
+
+function confirmDeleteAccount() {
+  zmConfirm('This will permanently delete your account and all your products. This CANNOT be undone.', 'Delete Account', () => {
+    zmConfirm('Last confirmation — are you absolutely sure? All data will be lost forever.', 'Final Confirmation', () => {
+      showToast('Please contact support@zmafrdeal.com to request account deletion.', 'warning');
+    }, null, 'Yes, Delete Everything', true);
+  }, null, 'Continue', true);
+}
+
+// ==================== IMAGE UPLOAD ====================
+const SUPABASE_URL = 'https://izppgooonnhmlmysykwx.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_X1e17sw4k_sl5eb4XKI1fw_T8c_0F4Z';
+const STORAGE_BUCKET = 'product-images';
+
+async function sUploadFile(file, folder) {
+  const ext = file.name.split('.').pop() || 'jpg';
+  const filename = `${folder}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${STORAGE_BUCKET}/${filename}`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'apikey': SUPABASE_ANON_KEY, 'Content-Type': file.type || 'image/jpeg', 'x-upsert': 'true' },
+      body: file
+    });
+    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e?.message || `Upload failed (${res.status})`); }
+    return `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${filename}`;
+  } catch (e) { showToast('Image upload failed: ' + e.message + '. Please paste a URL instead.', 'error'); return null; }
+}
+
+function sRemoveGalleryUrl(urlToRemove, fieldId, btn) {
+  const field = document.getElementById(fieldId);
+  const all = field.value.split(',').map(s => s.trim()).filter(s => s && s !== urlToRemove);
+  field.value = all.join(', ');
+  btn.closest('[data-img-wrap]').remove();
+}
+
+function sPreviewHome(url) {
+  const prev = document.getElementById('sHomePreview');
+  if (url) prev.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">`;
+}
+
+async function sUploadHome(input) {
+  const file = input.files[0]; if (!file) return;
+  const status = document.getElementById('sHomeStatus');
+  status.innerHTML = '<span style="color:var(--warning);">Uploading…</span>';
+  const url = await sUploadFile(file, 'home');
+  if (!url) { status.innerHTML = '<span style="color:var(--error);">Upload failed — paste a URL instead</span>'; return; }
+  document.getElementById('pHomePhoto').value = url;
+  sPreviewHome(url);
+  status.innerHTML = '<span style="color:var(--success);">Uploaded!</span>';
+}
+
+async function sUploadGallery(files) {
+  const status = document.getElementById('sGalleryStatus');
+  const grid = document.getElementById('sGalleryGrid');
+  status.textContent = `Uploading ${files.length} photo(s)…`;
+  const urls = [];
+  for (const file of files) {
+    const url = await sUploadFile(file, 'gallery');
+    if (!url) continue;
+    urls.push(url);
+    const wrap = document.createElement('div');
+    wrap.setAttribute('data-img-wrap', '1');
+    wrap.style.cssText = 'position:relative;width:70px;height:70px;flex-shrink:0;';
+    wrap.innerHTML = `<img src="${url}" style="width:70px;height:70px;object-fit:cover;border-radius:8px;border:1px solid var(--border);"/>
+      <button type="button" onclick="sRemoveGalleryUrl('${url.replace(/'/g,"\\'")}','pScrollPhotos',this)" title="Remove" style="position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;background:var(--error);color:#fff;border:none;cursor:pointer;font-size:.7rem;display:flex;align-items:center;justify-content:center;padding:0;line-height:1;">✕</button>`;
+    grid.appendChild(wrap);
+  }
+  if (!urls.length) { status.innerHTML = '<span style="color:var(--error);">Upload failed — paste URLs instead</span>'; return; }
+  const existing = document.getElementById('pScrollPhotos').value;
+  const all = (existing ? existing.split(',').map(s => s.trim()).filter(Boolean) : []).concat(urls);
+  document.getElementById('pScrollPhotos').value = all.join(', ');
+  status.innerHTML = `<span style="color:var(--success);">${urls.length} photo(s) ready!</span>`;
+}
+
+async function sUploadMore(files) {
+  const grid = document.getElementById('sMoreGrid');
+  const urls = [];
+  for (const file of files) {
+    const url = await sUploadFile(file, 'more');
+    if (!url) continue;
+    urls.push(url);
+    const wrap = document.createElement('div');
+    wrap.setAttribute('data-img-wrap', '1');
+    wrap.style.cssText = 'position:relative;width:70px;height:70px;flex-shrink:0;';
+    wrap.innerHTML = `<img src="${url}" style="width:70px;height:70px;object-fit:cover;border-radius:8px;border:1px solid var(--border);"/>
+      <button type="button" onclick="sRemoveGalleryUrl('${url.replace(/'/g,"\\'")}','pMorePhotos',this)" title="Remove" style="position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;background:var(--error);color:#fff;border:none;cursor:pointer;font-size:.7rem;display:flex;align-items:center;justify-content:center;padding:0;line-height:1;">✕</button>`;
+    grid.appendChild(wrap);
+  }
+  if (!urls.length) return;
+  const existing = document.getElementById('pMorePhotos').value;
+  const all = (existing ? existing.split(',').map(s => s.trim()).filter(Boolean) : []).concat(urls);
+  document.getElementById('pMorePhotos').value = all.join(', ');
+}
+
+function sDrop(e) {
+  e.preventDefault();
+  document.getElementById('sGalleryZone').style.borderColor = 'var(--border)';
+  const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+  if (files.length) sUploadGallery(files);
+}
+
+async function editUploadPhoto(input) {
+  const file = input.files[0]; if (!file) return;
+  const status = document.getElementById('editPhotoStatus');
+  status.innerHTML = '<span style="color:var(--warning);">Uploading…</span>';
+  const url = await sUploadFile(file, 'edit');
+  if (!url) { status.innerHTML = '<span style="color:var(--error);">Upload failed — paste a URL manually</span>'; return; }
+  document.getElementById('editPPhoto').value = url;
+  const prev = document.getElementById('editPhotoPreview');
+  document.getElementById('editPhotoPreviewImg').src = url;
+  prev.style.display = 'block';
+  status.innerHTML = '<span style="color:var(--success);">Photo uploaded!</span>';
+}
+
+// ==================== FLASH SALE ====================
+function _cs() { return (window.ZM && window.ZM.symbol) || 'Le'; }
+
+async function loadFlashSale() {
+  const list = document.getElementById('flashSaleList');
+  list.innerHTML = '<div class="spinner-wrap"><div class="spinner"></div></div>';
+  try {
+    const res = await fetch(API + '/api/sellers/dashboard', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    const products = (data.data?.products || []);
+    if (!products.length) { list.innerHTML = '<div class="empty-state"><div>No products yet. Post a product first.</div></div>'; return; }
+    list.innerHTML = products.map(p => {
+      const isFlash = p.is_flash_sale;
+      const endDate = p.flash_sale_end ? new Date(p.flash_sale_end).toLocaleString() : '';
+      const discBadge = p.discount_percentage ? `<span style="background:var(--error);color:#fff;padding:2px 7px;border-radius:6px;font-size:.7rem;font-weight:700;">${Math.round(p.discount_percentage)}% OFF</span>` : '';
+      return `<div style="background:var(--surface);border:1px solid ${isFlash ? 'var(--primary)' : 'var(--border)'};border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;margin-bottom:12px;flex-wrap:wrap;">
+        <img src="${p.main_photo || p.home_photo || ''}" onerror="this.style.display='none'" style="width:64px;height:64px;object-fit:cover;border-radius:10px;flex-shrink:0;border:1px solid var(--border);background:var(--surface2);" alt=""/>
+        <div style="flex:1;min-width:140px;">
+          <div style="font-weight:700;font-size:.9rem;margin-bottom:4px;">${(p.name||'').replace(/</g,'&lt;')}</div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            ${isFlash ? `<span style="font-size:.82rem;color:var(--primary);font-weight:700;">${_cs()}${Number(p.price).toLocaleString()}</span><span style="font-size:.78rem;color:var(--text2);text-decoration:line-through;">${_cs()}${Number(p.previous_price||0).toLocaleString()}</span>${discBadge}` : `<span style="font-size:.82rem;color:var(--text);font-weight:600;">${_cs()}${Number(p.price).toLocaleString()}</span>`}
+          </div>
+          ${isFlash && endDate ? `<div style="font-size:.72rem;color:var(--text2);margin-top:3px;">Ends: ${endDate}</div>` : ''}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;align-items:flex-end;">
+          ${isFlash ? `<button onclick="endFlashSale('${p.id}','${(p.name||'').replace(/'/g,"\\'")}',${p.previous_price||p.price})" style="padding:8px 14px;background:var(--error);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:.8rem;font-weight:600;">End Sale</button>`
+            : `<button onclick="openFlashSaleModal('${p.id}','${(p.name||'').replace(/'/g,"\\'")}',${p.price})" style="padding:8px 14px;background:var(--primary);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:.8rem;font-weight:600;">Start Sale</button>`}
+        </div>
+      </div>`;
+    }).join('');
+  } catch (e) { list.innerHTML = `<div class="empty-state"><div>Error: ${e.message}</div></div>`; }
+}
+
+function openFlashSaleModal(id, name, currentPrice) {
+  document.getElementById('fsProdId').value = id;
+  document.getElementById('fsProdName').textContent = name;
+  document.getElementById('fsOriginalPrice').value = currentPrice;
+  document.getElementById('fsDiscountPct').value = '';
+  document.getElementById('fsFlashPrice').value = '';
+  document.getElementById('fsCalcNote').textContent = '';
+  const now = new Date(Date.now() + 24*3600*1000);
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('fsEndTime').value = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  document.getElementById('flashSaleModal').classList.add('open');
+}
+
+function calcFlashSalePrice(changedField) {
+  const orig = parseFloat(document.getElementById('fsOriginalPrice').value) || 0;
+  const note = document.getElementById('fsCalcNote');
+  if (!orig) { note.textContent = ''; return; }
+  if (changedField === 'pct') {
+    const pct = parseFloat(document.getElementById('fsDiscountPct').value) || 0;
+    if (!pct) { note.textContent = ''; return; }
+    const flash = +(orig * (1 - pct / 100)).toFixed(2);
+    document.getElementById('fsFlashPrice').value = flash;
+    note.textContent = `Customers pay ${_cs()}${flash.toLocaleString()} (was ${_cs()}${orig.toLocaleString()}) — save ${pct}%`;
+  } else {
+    const flash = parseFloat(document.getElementById('fsFlashPrice').value) || 0;
+    if (!flash || flash >= orig) { note.textContent = flash >= orig ? 'Flash price must be less than original price' : ''; return; }
+    const pct = +((orig - flash) / orig * 100).toFixed(2);
+    document.getElementById('fsDiscountPct').value = pct;
+    note.textContent = `Customers pay ${_cs()}${flash.toLocaleString()} (was ${_cs()}${orig.toLocaleString()}) — save ${pct}%`;
+  }
+}
+
+async function submitFlashSale() {
+  const id = document.getElementById('fsProdId').value;
+  const orig = parseFloat(document.getElementById('fsOriginalPrice').value);
+  const flash = parseFloat(document.getElementById('fsFlashPrice').value);
+  const pct = parseFloat(document.getElementById('fsDiscountPct').value);
+  const endTime = document.getElementById('fsEndTime').value;
+  if (!orig || !flash || !pct || !endTime) { showToast('Fill in all fields', 'error'); return; }
+  if (flash >= orig) { showToast('Flash sale price must be less than original price', 'error'); return; }
+  const btn = document.getElementById('fsSubmitBtn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    const res = await fetch(API + '/api/products/' + id, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ is_flash_sale: true, flash_sale_end: new Date(endTime).toISOString(), price: flash, previous_price: orig, discount_percentage: pct }) });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || 'Failed');
+    document.getElementById('flashSaleModal').classList.remove('open');
+    showToast('Flash sale started!');
+    loadFlashSale();
+  } catch (e) { showToast('Error: ' + e.message, 'error'); }
+  finally { btn.disabled = false; btn.textContent = 'Start Flash Sale'; }
+}
+
+async function endFlashSale(id, name, restorePrice) {
+  if (!confirm(`End flash sale for "${name}" and restore price to ${_cs()}${Number(restorePrice).toLocaleString()}?`)) return;
+  try {
+    const res = await fetch(API + '/api/products/' + id, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ is_flash_sale: false, flash_sale_end: null, price: restorePrice, discount_percentage: 0 }) });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || 'Failed');
+    showToast('Flash sale ended. Price restored.');
+    loadFlashSale();
+  } catch (e) { showToast('Error: ' + e.message, 'error'); }
+}
+
+// ==================== NOTIFICATIONS ====================
+async function loadSellerNotifications() {
+  const list = document.getElementById('sellerNotifList');
+  list.innerHTML = '<div class="spinner-wrap"><div class="spinner"></div></div>';
+  try {
+    const res = await fetch(API + '/api/notifications', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    const notifs = data.data || [];
+    if (!notifs.length) { list.innerHTML = '<div class="empty-state"><div>No notifications yet.</div></div>'; return; }
+    list.innerHTML = notifs.map(n => {
+      const d = new Date(n.created_at);
+      const dateStr = d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+      const timeStr = d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+      const icons = { order: '📦', admin_message: '💬', review: '⭐', system: '📢' };
+      const icon = icons[n.type] || '🔔';
+      return `<div style="background:var(--surface);border:1px solid ${n.read ? 'var(--border)' : 'var(--primary)'};border-radius:14px;padding:14px 16px;display:flex;gap:12px;margin-bottom:10px;${n.read ? '' : 'border-left-width:3px;'}">
+        <div style="font-size:1.4rem;flex-shrink:0;margin-top:2px;">${icon}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:700;font-size:.88rem;margin-bottom:3px;">${(n.title||'Notification').replace(/</g,'&lt;')}</div>
+          <div style="font-size:.82rem;color:var(--text2);line-height:1.45;">${(n.message||'').replace(/</g,'&lt;')}</div>
+          <div style="font-size:.7rem;color:var(--text2);margin-top:5px;">${dateStr} · ${timeStr}</div>
+        </div>
+        ${!n.read ? '<div style="width:8px;height:8px;background:var(--primary);border-radius:50%;flex-shrink:0;margin-top:5px;"></div>' : ''}
+      </div>`;
+    }).join('');
+  } catch (e) { list.innerHTML = `<div class="empty-state"><div>Error loading notifications: ${e.message}</div></div>`; }
+}
+
+// ==================== REVIEWS ====================
+async function loadSellerReviews() {
+  const list = document.getElementById('sellerReviewsList');
+  list.innerHTML = '<div class="spinner-wrap"><div class="spinner"></div></div>';
+  try {
+    const res = await fetch(API + '/api/sellers/dashboard', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    const products = (data.data?.products || []);
+    if (!products.length) { list.innerHTML = '<div class="empty-state"><div>No products yet.</div></div>'; return; }
+    const allReviews = [];
+    await Promise.all(products.map(async p => {
+      try {
+        const rRes = await fetch(API + '/api/reviews/' + p.id);
+        const rData = await rRes.json();
+        (rData.data || []).forEach(r => { allReviews.push({ ...r, productName: p.name, productPhoto: p.main_photo || p.home_photo || '' }); });
+      } catch (e) {}
+    }));
+    if (!allReviews.length) { list.innerHTML = '<div class="empty-state"><div>No reviews yet.</div></div>'; return; }
+    allReviews.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    list.innerHTML = allReviews.map(r => {
+      const stars = '★'.repeat(r.rating || 0) + '☆'.repeat(5 - (r.rating || 0));
+      const d = new Date(r.created_at);
+      const dateStr = d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+      return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <img src="${r.productPhoto}" onerror="this.style.display='none'" style="width:42px;height:42px;object-fit:cover;border-radius:8px;border:1px solid var(--border);flex-shrink:0;background:var(--surface2);" alt=""/>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:.75rem;color:var(--text2);margin-bottom:2px;">${r.productName.replace(/</g,'&lt;')}</div>
+            <div style="font-size:1rem;color:var(--primary);letter-spacing:1px;">${stars}</div>
+          </div>
+          <div style="font-size:.7rem;color:var(--text2);">${dateStr}</div>
+        </div>
+        ${r.comment ? `<div style="font-size:.86rem;color:var(--text);line-height:1.5;border-top:1px solid var(--border);padding-top:8px;">"${r.comment.replace(/</g,'&lt;')}"</div>` : ''}
+        ${r.profiles?.full_name ? `<div style="font-size:.72rem;color:var(--text2);margin-top:6px;">— ${r.profiles.full_name.replace(/</g,'&lt;')}</div>` : ''}
+      </div>`;
+    }).join('');
+  } catch (e) { list.innerHTML = `<div class="empty-state"><div>Error loading reviews: ${e.message}</div></div>`; }
+}
+
+// ==================== SELLER MESSAGES ====================
+let _sellerMsgs = [];
+const SELLER_QUICK_STARTERS = [
+  'Product approval question',
+  'Account / payout issue',
+  'Shipping / logistics help',
+  'How to edit my listing?',
+  'Commission or fee query',
+  'Report a problem',
+];
+
+async function loadSellerMessages() {
+  const list = document.getElementById('sellerMsgList');
+  list.innerHTML = '<div class="spinner-wrap"><div class="spinner"></div></div>';
+  try {
+    const res = await fetch(API + '/api/messages', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    _sellerMsgs = (data.data || []).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    renderSellerMsgList();
+  } catch (e) {
+    list.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text2);">Could not load messages. ${e.message}</div>`;
+  }
+}
+
+function renderSellerMsgList() {
+  const list = document.getElementById('sellerMsgList');
+  const unreadBanner = document.getElementById('sellerMsgUnread');
+  if (!_sellerMsgs.length) {
+    list.innerHTML = `<div style="text-align:center;padding:60px 20px;">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="margin:0 auto 16px;display:block;opacity:.3;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <div style="font-size:1rem;font-weight:600;margin-bottom:6px;">No messages yet</div>
+      <div style="font-size:.85rem;color:var(--text2);margin-bottom:20px;">Send a message to the admin team — we usually reply within 24 hours.</div>
+      <button class="nav-btn btn-primary" style="margin:0 auto;" onclick="openNewSellerMsg()">Send First Message</button>
+    </div>`;
+    unreadBanner.style.display = 'none';
+    return;
+  }
+  const repliedUnread = _sellerMsgs.filter(m => m.status === 'replied' && m.reply);
+  if (repliedUnread.length) {
+    unreadBanner.style.display = 'flex';
+    document.getElementById('sellerMsgUnreadText').textContent = `${repliedUnread.length} message${repliedUnread.length > 1 ? 's have' : ' has'} a reply from admin`;
+  } else {
+    unreadBanner.style.display = 'none';
+  }
+  list.innerHTML = _sellerMsgs.map(m => {
+    const d = new Date(m.created_at);
+    const dateStr = d.toLocaleString('en-GB', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    const statusColor = m.status === 'replied' ? 'var(--success)' : m.status === 'read' ? 'var(--warning)' : 'var(--text2)';
+    const statusLabel = m.status === 'replied' ? '✓ Replied' : m.status === 'read' ? '👁 Seen' : '⏳ Sent';
+    const subj = (m.subject || 'General Inquiry').replace(/</g,'&lt;');
+    const msgPreview = (m.message || '').replace(/</g,'&lt;').substring(0, 100);
+    return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .2s;" onmouseenter="this.style.borderColor='rgba(246,139,30,.35)'" onmouseleave="this.style.borderColor='var(--border)'" onclick="openSellerChat('${m.id}')">
+      <div style="padding:13px 15px;display:flex;align-items:center;gap:12px;background:var(--surface2);border-bottom:1px solid var(--border);">
+        <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.95rem;color:#fff;flex-shrink:0;">A</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:700;font-size:.9rem;">Zmafrdeal Admin</div>
+          <div style="font-size:.72rem;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${subj}</div>
+        </div>
+        <div style="flex-shrink:0;text-align:right;">
+          <div style="font-size:.68rem;color:var(--text2);">${dateStr}</div>
+          <div style="font-size:.7rem;font-weight:600;margin-top:3px;color:${statusColor};">${statusLabel}</div>
+        </div>
+      </div>
+      <div style="padding:12px 15px;">
+        <div style="font-size:.85rem;color:var(--text2);line-height:1.5;margin-bottom:${m.reply ? '10px' : '0'};">${msgPreview}${(m.message||'').length > 100 ? '…' : ''}</div>
+        ${m.reply ? `<div style="background:rgba(246,139,30,.07);border-left:3px solid var(--primary);border-radius:0 8px 8px 0;padding:8px 12px;">
+          <div style="font-size:.68rem;font-weight:700;color:var(--primary);margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em;">Admin Reply</div>
+          <div style="font-size:.82rem;color:var(--text);line-height:1.45;">${m.reply.replace(/</g,'&lt;').substring(0,120)}${m.reply.length > 120 ? '…' : ''}</div>
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openSellerChat(msgId) {
+  const m = _sellerMsgs.find(x => String(x.id) === String(msgId));
+  if (!m) return;
+  document.getElementById('sellerChatMsgId').value = msgId;
+  document.getElementById('sellerComposeHdr').style.display = 'none';
+  document.getElementById('sellerMsgInput').placeholder = 'Reply to admin (adds to this thread)…';
+
+  // Build chat area
+  const area = document.getElementById('sellerChatArea');
+  const subj = (m.subject || 'General Inquiry').replace(/</g,'&lt;');
+  const sellerInitial = (sellerData?.profile?.full_name || 'S').charAt(0).toUpperCase();
+  const d = (dt) => new Date(dt).toLocaleString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+
+  area.innerHTML = `
+    <div style="text-align:center;margin-bottom:8px;">
+      <div style="display:inline-block;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 14px;font-size:.72rem;color:var(--text2);">📋 ${subj}</div>
+    </div>
+    <!-- Seller message bubble -->
+    <div style="display:flex;gap:10px;align-items:flex-end;flex-direction:row-reverse;">
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:var(--primary);flex-shrink:0;">${sellerInitial}</div>
+      <div style="max-width:78%;">
+        <div style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:16px 16px 4px 16px;padding:11px 14px;font-size:.88rem;color:#fff;line-height:1.5;white-space:pre-wrap;">${(m.message||'').replace(/</g,'&lt;')}</div>
+        ${m.photo_url ? `<img src="${m.photo_url}" style="max-width:220px;border-radius:10px;margin-top:6px;display:block;" alt="Photo"/>` : ''}
+        <div style="font-size:.65rem;color:var(--text2);margin-top:4px;text-align:right;">${d(m.created_at)} · You</div>
+      </div>
+    </div>
+    ${m.reply ? `
+    <!-- Admin reply bubble -->
+    <div style="display:flex;gap:10px;align-items:flex-end;">
+      <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.85rem;color:#fff;flex-shrink:0;">Z</div>
+      <div style="max-width:78%;">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px 16px 16px 4px;padding:11px 14px;font-size:.88rem;color:var(--text);line-height:1.5;white-space:pre-wrap;">${m.reply.replace(/</g,'&lt;')}</div>
+        <div style="font-size:.65rem;color:var(--text2);margin-top:4px;">${m.replied_at ? d(m.replied_at) : ''} · Admin</div>
+      </div>
+    </div>` : `
+    <div style="text-align:center;padding:20px 0;">
+      <div style="display:inline-block;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:.75rem;color:var(--text2);">⏳ Waiting for admin reply…</div>
+    </div>`}`;
+
+  // Quick starters hidden for existing thread
+  document.getElementById('sellerQuickStarters').style.display = 'none';
+  document.getElementById('sellerChatModal').classList.add('open');
+  setTimeout(() => { area.scrollTop = area.scrollHeight; }, 80);
+}
+
+function openNewSellerMsg() {
+  document.getElementById('sellerChatMsgId').value = '';
+  document.getElementById('sellerMsgSubject').value = '';
+  document.getElementById('sellerMsgInput').value = '';
+  document.getElementById('sellerMsgInput').placeholder = 'Type your message to admin…';
+  document.getElementById('sellerComposeHdr').style.display = 'block';
+  document.getElementById('sellerQuickStarters').style.display = 'block';
+
+  // Populate quick starter buttons
+  const container = document.getElementById('sellerStarterBtns');
+  container.innerHTML = SELLER_QUICK_STARTERS.map(s =>
+    `<button onclick="sellerUseStarter(this,'${s.replace(/'/g,"\\'")}')" style="padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);color:var(--text2);font-size:.75rem;cursor:pointer;transition:all .2s;white-space:nowrap;" onmouseenter="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseleave="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">${s}</button>`
+  ).join('');
+
+  // Clear chat area with welcome message
+  document.getElementById('sellerChatArea').innerHTML = `
+    <div style="text-align:center;padding:30px 20px;">
+      <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:900;color:#fff;">Z</div>
+      <div style="font-weight:700;margin-bottom:6px;">Welcome to Seller Support</div>
+      <div style="font-size:.83rem;color:var(--text2);line-height:1.6;">Send us a message and we'll get back to you within 24 hours. Use a subject to help us respond faster.</div>
+    </div>`;
+
+  document.getElementById('sellerChatModal').classList.add('open');
+}
+
+function sellerUseStarter(btn, text) {
+  document.getElementById('sellerMsgSubject').value = text;
+  document.getElementById('sellerMsgInput').focus();
+  document.getElementById('sellerStarterBtns').querySelectorAll('button').forEach(b => {
+    b.style.borderColor = 'var(--border)'; b.style.color = 'var(--text2)'; b.style.background = 'var(--surface)';
+  });
+  btn.style.borderColor = 'var(--primary)'; btn.style.color = '#fff'; btn.style.background = 'var(--primary)';
+}
+
+async function sendSellerMsg() {
+  const msgIdEl = document.getElementById('sellerChatMsgId');
+  const text = document.getElementById('sellerMsgInput').value.trim();
+  const subject = document.getElementById('sellerMsgSubject').value.trim() || 'General Inquiry';
+  if (!text) { showToast('Please type a message first.', 'warning'); return; }
+
+  const btn = document.getElementById('sellerSendBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner" style="width:18px;height:18px;border-width:2px;"></div>';
+
+  try {
+    const body = { message: text, subject };
+    const res = await fetch(API + '/api/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data?.error || data?.message || 'Failed to send');
+
+    document.getElementById('sellerMsgInput').value = '';
+    showToast('Message sent! Admin will reply soon.', 'success');
+    document.getElementById('sellerChatModal').classList.remove('open');
+    await loadSellerMessages();
+    switchDash('messages');
+  } catch (e) {
+    showToast('Send failed: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+  }
+}
+
+// ==================== LOGOUT ====================
+function doLogout() {
+  localStorage.removeItem('zm_token');
+  localStorage.removeItem('zm_user');
+  window.location.reload();
+}
+
+// ==================== SESSION CHECK ====================
+async function checkAuth() {
+  if (!token) return;
+  try {
+    const res = await fetch(API + '/api/sellers/dashboard', { headers: { Authorization: 'Bearer ' + token } });
+    const data = await res.json();
+    if (data.success) { sellerData = data.data; showDashboard(data.data); }
+    else { localStorage.removeItem('zm_token'); token = null; }
+  } catch (e) {}
+}
+
+checkAuth();
+
+// ==================== FAQ ACCORDION ====================
+function toggleFaq(item) {
+  const isOpen = item.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-item.open').forEach(el => {
+    el.classList.remove('open');
+    el.querySelector('.faq-icon').textContent = '+';
+  });
+  // Open this one if it wasn't open
+  if (!isOpen) {
+    item.classList.add('open');
+    item.querySelector('.faq-icon').textContent = '−';
+  }
+}
+
+// ==================== TESTIMONIALS DRAG SCROLL ====================
+(function() {
+  const wrap = document.getElementById('testimonialsWrap');
+  if (!wrap) return;
+  let isDown = false, startX, scrollLeft;
+  wrap.addEventListener('mousedown', e => { isDown = true; wrap.classList.add('active'); startX = e.pageX - wrap.offsetLeft; scrollLeft = wrap.scrollLeft; });
+  wrap.addEventListener('mouseleave', () => { isDown = false; });
+  wrap.addEventListener('mouseup', () => { isDown = false; });
+  wrap.addEventListener('mousemove', e => { if (!isDown) return; e.preventDefault(); const x = e.pageX - wrap.offsetLeft; const walk = (x - startX) * 1.5; wrap.scrollLeft = scrollLeft - walk; });
+})();
+
+// ==================== POLICY OVERLAYS ====================
+function openPolicy(slug) {
+  const el = document.getElementById('pol-' + slug);
+  if (!el) return;
+  el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  el.scrollTop = 0;
+  if (el.querySelector('.policy-page')) el.querySelector('.policy-page').scrollTop = 0;
+}
+
+function closePolicy(slug) {
+  const el = document.getElementById('pol-' + slug);
+  if (!el) return;
+  el.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close policy on overlay click (outside the page panel)
+document.querySelectorAll('.policy-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) closePolicy(this.id.replace('pol-', ''));
+  });
+});
+
+// ==================== CUSTOM CONFIRM ====================
+let _zmCB = null;
+function zmConfirm(msg, title, onOK, onCancel, okLabel, danger) {
+  _zmCB = { ok: onOK || (() => {}), cancel: onCancel || (() => {}) };
+  document.getElementById('zmConfirmTitle').textContent = title || 'Confirm';
+  document.getElementById('zmConfirmMsg').textContent = msg;
+  document.getElementById('zmConfirmOkBtn').textContent = okLabel || 'Confirm';
+  document.getElementById('zmConfirmOkBtn').style.background = danger ? '#ef4444' : '#f68b1e';
+  const o = document.getElementById('zmConfirmOverlay');
+  o.style.opacity = '1'; o.style.pointerEvents = 'auto';
+  document.getElementById('zmConfirmBox').style.transform = 'scale(1) translateY(0)';
+}
+function zmConfirmResolve(confirmed) {
+  const o = document.getElementById('zmConfirmOverlay');
+  o.style.opacity = '0'; o.style.pointerEvents = 'none';
+  document.getElementById('zmConfirmBox').style.transform = 'scale(.94) translateY(14px)';
+  const cb = _zmCB; _zmCB = null;
+  setTimeout(() => { if (cb) { if (confirmed) cb.ok(); else cb.cancel(); } }, 60);
+}
+</script>
+</body>
+</html>
